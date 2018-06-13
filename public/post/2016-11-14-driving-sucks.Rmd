@@ -1,0 +1,17 @@
+---
+title: Driving Sucks on Thursdays – Analysis of my Commute
+author: Brett Kobold
+date: 2016-11-14T04:24:16+00:00
+url: /driving-sucks/
+
+---
+YA. I have been commuting through downtown LA for the last 6 months and have noticed some strange phenomenon over the weeks. Consistently I have found some days worse than others. Google Maps is one of my favorite applications and if I had to give up every app but one, I would save Google Maps. This application has allowed for me to explore all over Los Angeles and is the reason I was able to safely navigate the California coast on my bike tour several summers ago. I know that the application is built on several very powerful APIs and I know I could harness parts of those APIs to see traffic over the week through the beautiful skyscrapers of Los Angeles.
+
+Below is a data visualization that shows my average commute estimated by Google during the week from Pasadena, CA to Marina del Ray, CA. It is about 30 miles both ways.
+
+![Dat Data](http://www.brettrics.com/wp-content/uploads/2016/11/homeToWorkVV.svg) 
+
+
+It becomes apparent that Thursdays suck and no matter what there will be hardcore traffic that day. It doesn’t help though that the day after hump day has worse traffic than actual hump day. I assumed Friday would be worse, but I actually enjoy my drive into the office on Fridays. This is just one way to look at traffic over the week, <a href="https://www.facebook.com/higaki/posts/10154033843371298" target="_blank">Yuji Higaki</a> created a video that shows traffic over San Fransico over the course of a day.
+
+* * *Below you can find the script I used to create this visualization. You will need to get an [API key from Google](https://developers.google.com/maps/documentation/distance-matrix/get-api-key) for this to work. It also consumes an entire days worth of calls to create one dataset, so experiment sparely. I just created a new project if I ran out of calls. If you are just interested in one location to another, then it will only consume half of all the calls. Refer to Google’s documentation to understand how the API calls work.
