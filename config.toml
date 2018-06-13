@@ -1,5 +1,5 @@
 theme = "hyde"
-baseURL = "https://elegant-shannon-0a4290.netlify.com"
+baseURL = "https://elegant-shannon-0a4290.netlify.com/"
 languageCode = "en-us"
 title = "Brettrics"
 description = "A place to explore data with all the R!"
