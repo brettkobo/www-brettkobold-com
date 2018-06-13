@@ -2,40 +2,40 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Brettrics</title>
-    <link>http://example.org/tags/</link>
+    <link>https://elegant-shannon-0a4290.netlify.com/tags/</link>
     <description>Recent content in Tags on Brettrics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>2018</copyright>
     <lastBuildDate>Thu, 23 Jul 2015 21:13:14 -0500</lastBuildDate>
     
-	<atom:link href="http://example.org/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://elegant-shannon-0a4290.netlify.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Plot</title>
-      <link>http://example.org/tags/plot/</link>
+      <link>https://elegant-shannon-0a4290.netlify.com/tags/plot/</link>
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
-      <guid>http://example.org/tags/plot/</guid>
+      <guid>https://elegant-shannon-0a4290.netlify.com/tags/plot/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R Markdown</title>
-      <link>http://example.org/tags/r-markdown/</link>
+      <link>https://elegant-shannon-0a4290.netlify.com/tags/r-markdown/</link>
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
-      <guid>http://example.org/tags/r-markdown/</guid>
+      <guid>https://elegant-shannon-0a4290.netlify.com/tags/r-markdown/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Regression</title>
-      <link>http://example.org/tags/regression/</link>
+      <link>https://elegant-shannon-0a4290.netlify.com/tags/regression/</link>
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
-      <guid>http://example.org/tags/regression/</guid>
+      <guid>https://elegant-shannon-0a4290.netlify.com/tags/regression/</guid>
       <description></description>
     </item>
     
