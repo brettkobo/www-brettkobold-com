@@ -1,5 +1,5 @@
 theme = "hyde"
-baseURL = "https://elegant-shannon-0a4290.netlify.com/"
+baseURL = "http://www.brettrics.com/"
 languageCode = "en-us"
 title = "Brettrics"
 description = "A place to explore data with all the R!"
@@ -9,15 +9,13 @@ enableEmoji = "true"
 [[menu.main]]
     name = "About"
     url = "/about/"
-[[menu.main]]
-    name = "GitHub"
-    url = "https://github.com/brettkobo"
-[[menu.main]]
-    name = "Twitter"
-    url = "https://twitter.com/brettkobo"
-
 
 [params]
-  themeColor = "theme-base-0d"
+  themeColor = "theme-base-08"
+  
+[params.social]
+    github = "brettkobo"
+    facebook = "brettkob"
+    linkedin = "brettkobo"
   
   

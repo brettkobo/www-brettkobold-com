@@ -1,0 +1,76 @@
+---
+title: Creating Sparklines for Blog Post with R and Plumber
+author: Brett Kobold
+date: '2018-07-25'
+url: creating-sparklines-for-blog-post-with-r-and-plumber
+---
+
+
+
+<p>One of my favorite R libraries is the <a href="https://www.rplumber.io/">plumber</a>, having the abibilty to quickly turn any of my R code into an API allows for anyone use my functions or data. Wanting to explore some use cases in the digital analytics relm for. One thing I have always been interested in was when a blog would show a trendline or spark line of an article. It is nice to see an organization being a transparent with some of the data they are collecting. It also gets to show me how late to the game I was when reading the articles. It also shows how virality kind of works, how the half-life of an articles is very shory and only in the begining.</p>
+<p>Being open with your site data puts you a bit of risk of exposing some of your company startegey but as a commumer of alot of articles, I wish I knew more about blog post to know how releivent they are and how popular they are so I can determine the value of the content. If you are writing good content, you should not be afraid of what giving up some of your data will do.</p>
+<p>So in the this blog post I will be dimstrating how to connent to the Google Analytics API using <code>googleanalyticsR</code> written by Mark Edmondson. Then using the <code>plumber</code> library for Jeff Allen to explose some of the data from Google Analytics for each article on your website. I will be showing three examples of how to write the R code to returns a raw JSON with the REST API, a htmtwidget you can plug in to your code, and a image contianing the processed blog post.</p>
+<p>The Guardian used to have these on each of its articles. It was built on top of the in-house analytics tool Ophan. So with out having to build an entire analytics system with real time streaming, we can create some spark lines from a easier assable tool.</p>
+<p>In order for you to programaticly access the data from Google Analytics, you need to set up a service account and create your own project in Google Developer Console. I could write a whole blog post on just setting up the authenication, but Mark Edmondson has done several great write ups on that. <a href="http://code.markedmondson.me/googleAnalyticsR/setup.html#service_accounts">Here</a> he will explain how to get a .json file that will be used for the crediants. The most important things is to make sure the authentication is working before you start up the API.</p>
+<p>First we are going to start by loading in the library and reading in the token that you downloaded from the Goolge Developer Console.</p>
+<pre class="r"><code>library(googleAnalyticsR) #retrived data
+library(googleAuthR) #authicating with service account
+library(sparkline) #returning sparkline htmlwidget
+library(lubridate) #work with dates easier
+library(dplyr) #manipulate data easier
+library(ggplot2) #static graphs
+
+#authicating conection to API
+gar_auth_service(&quot;google-analytics-sparkline-fbe6d3a4f4c5.json&quot;,  
+                 scope = c(&quot;https://www.googleapis.com/auth/analytics&quot;, 
+                           &quot;https://www.googleapis.com/auth/analytics.readonly&quot;))</code></pre>
+<p>After loading in the libraries and setting up the authication, I wrote some helper functions that makes it easier to call the Google Analytics API and aggeragate / shape the data.</p>
+<pre class="r"><code>#used to pull from specfic GA view
+#you can pull the view ids from your account list using ga_account_list()$viewId
+view_id &lt;- &quot;YOUR-VIEW-ID&quot;
+
+# used to reaggerage the daily data to daily to weekly or monthly. 
+aggergate_by_time_unit &lt;- function(google_analytics_data, time_unit) {
+  google_analytics_data %&gt;% 
+    mutate(date = floor_date(date, unit = time_unit)) %&gt;%
+    group_by(date) %&gt;%
+    summarise(pageviews = sum(pageviews))
+}
+
+# returns the pageviews for specific page in a aloted time rage
+retrieve_ga_data &lt;- function(start_date, end_date, page_url, view_id) {
+  google_analytics(viewId = view_id, 
+                 date_range = c(start_date, end_date), 
+                 dimensions = &quot;date&quot;,
+                 metrics = &quot;pageviews&quot;,
+                 filtersExpression = paste0(&quot;ga:pagePath==&quot;, page_url))
+}</code></pre>
+<p>After setting up the authentication and help function, we can now look at plumber and how we can use it to servce data over a REST api. Plumber has great documenation and I would recommend through it. Plumber makes it easy to turn your R code into a REST API that allow for any other application have access to what ever that R function is returning. Plumber is able to return all kinda of data, jsons, XML, images, and even HTML widgets. Similar to how roxygen turns comment into R documention, plumber used seralizer to create different parts of the API.</p>
+<p>I am going to show three ways for you to return a spark lines to your web pages. Lets start with plumber returning just a JSON.</p>
+<pre class="r"><code>#&#39; @serializer unboxedJSON
+#&#39; @get /sparklines-data
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  agg_data
+}</code></pre>
+<p>Returing a html widget of sparkline.</p>
+<pre class="r"><code>#&#39; @serializer htmlwidget
+#&#39; @get /sparklines-html
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  sparkline(agg_data$pageviews)
+}</code></pre>
+<p>Returning just plot as a .png.</p>
+<pre class="r"><code>#&#39; @get /sparklines-ggplot
+#&#39; @png (width = 140, height = 40)
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  plot_line &lt;- agg_data %&gt;%
+    ggplot() +
+    geom_line(aes(date, pageviews), stat = &quot;identity&quot;) +
+    theme_void()
+  print(plot_line)
+}</code></pre>

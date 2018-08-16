@@ -3,59 +3,160 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/driving-sucks/</loc>
+    <loc>/theortical-using-time-on-page-for-recommendation-engine/</loc>
+    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/creating-sparklines-for-blog-post-with-r-and-plumber/</loc>
+    <lastmod>2018-07-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/my-journey-across-the-us/</loc>
+    <lastmod>2018-07-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/net-neutrality/</loc>
+    <lastmod>2017-12-01T23:57:20+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/map-adventure-pass/</loc>
+    <lastmod>2017-08-21T01:12:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/quant-self-time/</loc>
+    <lastmod>2017-05-31T21:20:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/a-few-helpful-r-packages/</loc>
+    <lastmod>2017-05-18T05:02:51+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/bicycles-through-time/</loc>
+    <lastmod>2017-05-08T06:42:57+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tsa-claims/</loc>
+    <lastmod>2017-04-29T18:32:12+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/driving-sucks/</loc>
     <lastmod>2016-11-14T04:24:16+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/post/2015-07-23-r-rmarkdown/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/9-million-parking-tickets-la/</loc>
+    <lastmod>2016-10-04T06:58:46+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/</loc>
-    <lastmod>2016-11-14T04:24:16+00:00</lastmod>
+    <loc>/10-years-of-color/</loc>
+    <lastmod>2016-09-05T23:44:11+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/psychology-internship/</loc>
+    <lastmod>2016-08-31T19:05:35+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/pixel-implementation-google-spreadsheets/</loc>
+    <lastmod>2016-08-08T07:13:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/vincent_van_gogh_color/</loc>
+    <lastmod>2016-03-22T03:12:38+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tal-speaking-rate/</loc>
+    <lastmod>2016-02-28T18:55:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/dugger-data/</loc>
+    <lastmod>2016-02-27T06:04:23+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/stary_dogs_in_la/</loc>
+    <lastmod>2016-02-24T17:19:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/this-american-life-visualized/</loc>
+    <lastmod>2016-01-02T15:50:18+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/page-engagement-a-new-measure-of-success/</loc>
+    <lastmod>2015-04-17T04:00:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/tags/plot/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/categories/data-visualizations/</loc>
+    <lastmod>2017-05-31T21:20:37+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/post/</loc>
-    <lastmod>2016-11-14T04:24:16+00:00</lastmod>
+    <loc>/categories/google-tag-manager/</loc>
+    <lastmod>2016-08-08T07:13:06+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/categories/r/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/categories/pixels/</loc>
+    <lastmod>2016-08-08T07:13:06+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/tags/r-markdown/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2018-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/tags/regression/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/categories/quantified-self/</loc>
+    <lastmod>2017-05-31T21:20:37+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://elegant-shannon-0a4290.netlify.com/tags/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
+    <loc>/categories/r/</loc>
+    <lastmod>2017-05-31T21:20:37+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/uncategorized/</loc>
+    <lastmod>2017-12-01T23:57:20+00:00</lastmod>
     <priority>0</priority>
   </url>
   

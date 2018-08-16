@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.45" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>What 9 Million Parking Tickets Says About Los Angeles &middot; Brettrics</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Brettrics" />
+
+ 
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/solid.css" integrity="sha384-TbilV5Lbhlwdyc4RuIV/JhD8NR+BfMrvz4BL5QFa2we1hQu6wvREr3v6XSRfCTRp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/brands.css" integrity="sha384-7xAnn7Zm3QC1jFjVc1A6v/toepoG3JXboQYzbM0jrPzou9OFXm/fY6Z/XiIebl/k" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css" integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG" crossorigin="anonymous">
+
+
+ 
+<link rel="stylesheet" href="/css/dracula.css" rel="stylesheet" id="theme-stylesheet">
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Brettrics</h1></a>
+      <p class="lead">
+      A place to explore data with all the R!
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      <li><a href="/about/"> About </a></li>
+    </ul>
+    <section class="social">
+        	
+        	&nbsp;<a href="https://facebook.com/brettkob"><i class="fab fa-facebook-f"></i></a>
+        	&nbsp;<a href="https://github.com/brettkobo"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	&nbsp;<a href="https://linkedin.com/in/brettkobo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	
+        	
+    </section>
+    
+    <p>&copy; 2018. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>What 9 Million Parking Tickets Says About Los Angeles</h1>
+  <span class="post-date">Tue, Oct 4, 2016</span>
+  <p>Over the last 4 years the <a href="http://ladot.lacity.org/what-we-do/parking/parking-enforcement">Los Angeles Department of Transportation</a> has given out <strong>655 million dollars</strong> worth of parking tickets. As a resident of Southern California, I am all too familiar with walking out to my car after running inside real quick to grab my hat and finding that dreaded sun-faded white and yellow carbon paper on my windshield. All over Los Angeles, this is happening at an astonishing rate, on average 7000 cars are being written up every day. According to <a href="https://www.dmv.ca.gov/portal/wcm/connect/add5eb07-c676-40b4-98b5-8011b059260a/est_fees_pd_by_county.pdf?MOD=AJPERES" target="_blank">DMV records</a>, there are approximately 7.5 million registered vehicles in Los Angeles county. That means in 2015 over <strong>1/3 of the vehicles</strong> in Los Angeles could have been ticketed. That comes to 150 million dollars worth of tickets in 2015.</p>
+<p>Besides my personal frustrations with the handful of parking tickets I have received over the years, I wanted to better understand the ebbs and flows of the parking enforcement in Los Angeles. The real reason I started this research was so I know how to avoid saying “Ah, &amp;*!$” when I return to my car anywhere in Los Angeles.</p>
+<p>For a while now, I have known that there is a <a href="https://data.lacity.org/A-Well-Run-City/Parking-Citations/t4h6-r362/data" target="_blank">dataset</a> that contains all of the parking tickets in Los Angeles from 2012 to 2016. I actually took a stab at trying to understand this data over a year ago before I knew how to program in R. The dataset that was uploaded is geocoded in <a href="https://en.wikipedia.org/wiki/State_Plane_Coordinate_System" target="_blank">State Plane</a> and it was much harder to work with State Plane when the most powerful data analysis tool you know is Excel. Trying to convert 9 million rows of data with Excel proved to be challenging. <a href="https://public.tableau.com/profile/brett.kobold#!/vizhome/LACitationParkingDashboard/la_parking_tickets" target="_blank">My previous attempt</a> was built with Tableau.</p>
+<p>Now that I know a lot more about R and how to work with data better, I thought I would take another stab at this data set. The data is not the cleanest so I spent some time cleaning and getting it ready for analysis. First I had to convert the State Plane into a more common format, GPS works for most applications. I wanted to start with a more basic analysis and move into a deeper one.</p>
+<p>To start I wanted to show the overall volume of tickets by week over the course of the 4 years of data.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketsVol.svg" alt="ticketsvol" class="aligncenter size-full wp-image-259" /></p>
+<p>There is a very large spike in February 2016, that becomes more apparent in the breakdown of the number of parking violations by day in this heat map.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/heatMapDayMonth-v2.svg" alt="heatmapdaymonth-v2" class="aligncenter size-full wp-image-263" /></p>
+<p>To better understand that spike, I broke down the ticket volumes by violation type.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketsVolByViolation.svg" alt="ticketsvolbyviolation" class="aligncenter size-full wp-image-260" /></p>
+<p>There is an increase across the board not in just one ticket type. It is not easy to narrow down the exact reason for the spikes. Further research will need to be conducted to see what was going on in Los Angeles at this time.</p>
+<p>Another slice of data I wanted to explore was the number of tickets given per day on any given month. I’m always hearing that police and parking officials are trying to fill a monthly quota and that causes a huge spike of tickets at the end of the month. Well, that proved to be just a legend, at least according to the data. Below is a graph showing the various ticket types and the number of tickets given per day during the month.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketVelocity.svg" alt="ticketvelocity" class="aligncenter size-full wp-image-261" /></p>
+<p>After exploring some of the data over time, I wanted to explore the spatial aspects of the tickets. Most of this data was geocoded which allows for some fun visualization. Since this data only has individual points, I started with a density plot of the most frequented tickets around Los Angeles for each ticket type. On the left is a table of the number of tickets and neighborhood. That data was geocoded using the <a href="http://maps.latimes.com/about/#the-data" target="_blank">Los Angeles Times Data Desk</a> spatial data. The middle is a map with a density plot showing where ticket hot zones are. The right shows a heat map of the most common times for each ticket type.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/parkingHeatMapMapTable.svg" alt="parkingheatmapmaptable" class="aligncenter size-full wp-image-258" /></p>
+<p>From this high up, we can see a few things that stick out.</p>
+<blockquote>
+<p>When you have a time and a place you have a story.</p>
+</blockquote>
+<p>At 3am we have a surge of “No Parking” parking tickets located right outside the in Hollywood. It is possible that parking officials are waiting till right after the bars close at 2am. I guess we have to count our blessing for that spike because that means the people are either taking taxis or Ubers home and leaving their car overnight. That is money I am grateful for that is going to the city.</p>
+<p>We can see is the spikes at 9am, 11am, 1pm for street sweeping tickets. These are the moments you have walked back into your house to grab your sweater and you come back to a windshield with a pale yellow paper, a poorly swept street, and an absent parking official. The best part about that particular view is that you don’t have to worry about the weekends. The LA Times wrote an <a href="http://www.latimes.com/local/california/la-me-parking-tix-20141230-story.html">article</a> on this a few years ago proposing that parking officials were targeting certain communities.</p>
+<p>One of the final data slices I wanted to look at was the type of cars that are getting tickets. The data was a bit dirty, so I had to recode it. Underneath is a full-stacked bar chart broken down by car make and violation type.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/10/carMakeBar.svg" alt="carmakebar" class="aligncenter size-full wp-image-256" /></p>
+<p>One of the interesting things about this visual is that BMW and Mercedes do not like displaying their license plate. Perhaps the residents of Los Angeles should have followed <a href="http://www.itwire.com/it-people-news/enterprise/50649-the-truth-about-steve-jobs-number-plate" target="_blank">Steve Job’s</a> lead and swapped out their leased Mercedes every 6 months to avoid having to have a licence plate.</p>
+<p>Obviously, there are many other ways to slice this data but I am glad I was at least able to scratch the surface. My analysis has not proved any scandals or found any hidden agendas but what I wanted to do is bring awareness to areas of Los Angeles that are more prone to be targeted by parking officials. This will not be the end of my analysis on this dataset, but for now I am satisfied with the visuals and interesting trends.</p>
+<p>&lt;!–</p>
+<li>
+<a href="https://www.dmv.ca.gov/portal/wcm/connect/add5eb07-c676-40b4-98b5-8011b059260a/est\_fees\_pd\_by\_county.pdf?MOD=AJPERES" class="uri">https://www.dmv.ca.gov/portal/wcm/connect/add5eb07-c676-40b4-98b5-8011b059260a/est\_fees\_pd\_by\_county.pdf?MOD=AJPERES</a>
+</li>
+<ul>
+<li><a href="http://www.dot.ca.gov/trafficops/census/" class="uri">http://www.dot.ca.gov/trafficops/census/</a></li>
+<li><a href="http://media.metro.net/images/monorailpart2data.pdf" class="uri">http://media.metro.net/images/monorailpart2data.pdf</a></li>
+<li><a href="http://www.citylab.com/commute/2015/12/parking-los-angeles-maps-study/418593/" class="uri">http://www.citylab.com/commute/2015/12/parking-los-angeles-maps-study/418593/</a></li>
+<li><a href="http://www.latimes.com/local/cityhall/la-me-california-commute-20151103-story.html" class="uri">http://www.latimes.com/local/cityhall/la-me-california-commute-20151103-story.html</a></li>
+<li><a href="http://www.cleanstreetsla.org/cleanstat/" class="uri">http://www.cleanstreetsla.org/cleanstat/</a></li>
+<li><a href="http://www.nbclosangeles.com/news/local/LA-Ordered-Change-Parking-Ticket-Dispute-Process-389940601.html" class="uri">http://www.nbclosangeles.com/news/local/LA-Ordered-Change-Parking-Ticket-Dispute-Process-389940601.html</a></li>
+<li><a href="http://www.laweekly.com/news/an-app-that-fights-parking-tickets-has-arrived-in-la-but-does-it-work-5566764" class="uri">http://www.laweekly.com/news/an-app-that-fights-parking-tickets-has-arrived-in-la-but-does-it-work-5566764</a></li>
+<li><a href="https://www.citizine.tv/article/how-to-never-get-a-parking-ticket-in-los-angeles-again" class="uri">https://www.citizine.tv/article/how-to-never-get-a-parking-ticket-in-los-angeles-again</a></li>
+<li><a href="http://www.scpr.org/news/2016/06/22/61895/la-considering-lower-parking-ticket-fines-communit/" class="uri">http://www.scpr.org/news/2016/06/22/61895/la-considering-lower-parking-ticket-fines-communit/</a></li>
+<li><a href="http://losangeles.cbslocal.com/2015/01/29/following-cbs2-investigation-city-of-la-will-refund-drivers-for-more-than-14k-erroneous-parking-tickets/" class="uri">http://losangeles.cbslocal.com/2015/01/29/following-cbs2-investigation-city-of-la-will-refund-drivers-for-more-than-14k-erroneous-parking-tickets/</a></li>
+<li><a href="http://losangeles.cbslocal.com/css-table/" class="uri">http://losangeles.cbslocal.com/css-table/</a></li>
+<li><a href="http://bss.lacity.org/restricted\_parking\_sweeping_routes.cfm" class="uri">http://bss.lacity.org/restricted\_parking\_sweeping_routes.cfm</a></li>
+<li><a href="http://clkrep.lacity.org/onlinedocs/2015/15-1450-S1\_rpt\_DOT_06-14-2016.pdf" class="uri">http://clkrep.lacity.org/onlinedocs/2015/15-1450-S1\_rpt\_DOT_06-14-2016.pdf</a></li>
+<li><a href="http://maps.latimes.com/about/#the-data" class="uri">http://maps.latimes.com/about/#the-data</a></li>
+<li><a href="https://data.lacity.org/A-Livable-and-Sustainable-City/Department-Of-Transportation-DOT-Performance-Metri/hqix-zyxk" class="uri">https://data.lacity.org/A-Livable-and-Sustainable-City/Department-Of-Transportation-DOT-Performance-Metri/hqix-zyxk</a></li>
+<li><a href="http://www.laweekly.com/news/why-do-you-hate-the-la-parking-violations-bureau-so-much-maybe-because-it-lies-and-steals-your-money-2614828" class="uri">http://www.laweekly.com/news/why-do-you-hate-the-la-parking-violations-bureau-so-much-maybe-because-it-lies-and-steals-your-money-2614828</a> –!&gt;</li>
+</ul>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>

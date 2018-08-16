@@ -1,0 +1,24 @@
+---
+title: Steel is Not So Real Anymore – Analysis of 25 Years of Bicycles
+author: Brett Kobold
+type: post
+date: 2017-05-08T06:42:57+00:00
+url: /bicycles-through-time/
+categories:
+  - Data Visualizations
+  - R
+
+---
+
+
+
+<p>As an avid cyclist and bicycle mechanic, I have always taken a keen interest in how bicycles have evolved with technology. From the original modified <a href="https://www.youtube.com/watch?v=h19n-5qIp78" target="_blank">“klunker”</a> mountain bikes to the carbon fiber electronic shifting road bikes, bikes have come a long way and will continue to advance. We can look at this change in technology and start to see the shifts in the industry by observing the historical archives.</p>
+<p>Let explore some of the long-debated questions that keep popping up on bicycle message boards and talked about on those weekend rides with your dentist on his $6000 Pinarello. We are not going to debate which technology is better but more how the industry has changed and responded to the market in the last 25 years. There are all kinds of opinions and reviews comparing various tubing material, brakes, and gearing ratios. The industry responds to these reviews and sees what sales, so if we see an increase in carbon bikes we know that carbon bikes are popular.</p>
+<p>This data comes from <a href="http://www.bikepedia.com" target="_blank">Bikepedia</a>, a Wikipedia like website that catalogs bicycles as far back as 1993. Through some creative web scraping and some programmatic categorization, I have a dataset that contains all kinds of information and trends about the bicycle industry. One of the limitations of this data set is that it relays on the information being present on Bikepedia and classifiable. I haven’t looked at the all 50,000 bikes listed on the site but I have looked at enough to see the web scraper working accurately and the classifiers identifying the raw text correctly.</p>
+<p>In this analysis, we will be looking at the difference between road and mountain bikes and how different technologies have shaped each of these distinctive bikes. Starting with the mountain bike, each visual is a <a href="https://visage.co/data-visualization-101-area-charts/"target="_blank">100% area chart</a> showing what materials bicycles are made with, which brakes have been used, and how the number of gears has changed.</p>
+<p><img src="http://www.brettrics.com/wp-content/plot_uploads/plotMTB.svg" class="aligncenter size-full" /></p>
+<p>Back in the 90’s, steel was KING! It made about 60% of all mountain bikes. It didn’t take too long for steel to lose the majority when it became easier to make aluminum bikes. Carbon fiber has started to make a stronger appearance in the last 5 or so years. Nowadays it is also hard to find a newer mountain bike that at least doesn’t have the option of disk brakes. They have become the norm, and it is apparent v-brakes had the rise at the turn of the millennium but has since then fizzled out.</p>
+<p>After examining mountain bikes, let us take a closer look at road bikes.</p>
+<p><img src="http://www.brettrics.com/wp-content/plot_uploads/plotRoad.svg" class="aligncenter size-full" /></p>
+<p>Unlike mountain bikes, companies have always been making road bikes out of carbon fiber but we see the similar trend to the mountain bike with the increase in carbon in the early 2000’s. There is also an unusual trend that I can’t fully explain, the increase in gears happens slowly over the years for road bikes but not mountain bikes, there is a sharp increase in 9-speed and 10-speed in less than a year. This could be an example of how the industry tries their technology on road bikes first and then develops it for the mountain bikes.</p>
+<p>This is only a glance at the industry and how it has been shaped in the last 25 years. The bicycle industry has responded to what consumers want.</p>

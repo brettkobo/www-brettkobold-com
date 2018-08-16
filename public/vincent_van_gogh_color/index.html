@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.45" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Van Gogh’s Life through his Favorite Colors &middot; Brettrics</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Brettrics" />
+
+ 
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/solid.css" integrity="sha384-TbilV5Lbhlwdyc4RuIV/JhD8NR+BfMrvz4BL5QFa2we1hQu6wvREr3v6XSRfCTRp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/brands.css" integrity="sha384-7xAnn7Zm3QC1jFjVc1A6v/toepoG3JXboQYzbM0jrPzou9OFXm/fY6Z/XiIebl/k" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css" integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG" crossorigin="anonymous">
+
+
+ 
+<link rel="stylesheet" href="/css/dracula.css" rel="stylesheet" id="theme-stylesheet">
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Brettrics</h1></a>
+      <p class="lead">
+      A place to explore data with all the R!
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      <li><a href="/about/"> About </a></li>
+    </ul>
+    <section class="social">
+        	
+        	&nbsp;<a href="https://facebook.com/brettkob"><i class="fab fa-facebook-f"></i></a>
+        	&nbsp;<a href="https://github.com/brettkobo"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	&nbsp;<a href="https://linkedin.com/in/brettkobo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	
+        	
+    </section>
+    
+    <p>&copy; 2018. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>Van Gogh’s Life through his Favorite Colors</h1>
+  <span class="post-date">Tue, Mar 22, 2016</span>
+  <p>I set out to understand the life of a man through the colors he chose to use. Vincent van Gogh was an amazing painter who changed the art world more then he will ever know.</p>
+<blockquote>
+<p><em>What would life be if we had no courage to attempt anything?</em> – Vincent van Gogh</p>
+</blockquote>
+<p>As Vincent declared I wanted to have the courage to keep exploring data and discover the meaning behind it. This analysis was mostly used to hone my skills and better understand the capabilities of R. As I started to explore the packages that can interoperate and manipulate color, I was curious about the colors used by famous painters. I started with Van Gogh. Luckily, I was able to find a large collection of his painting on <a href="https://en.wikipedia.org/wiki/List_of_works_by_Vincent_van_Gogh">wikipedia</a>. From there I scraped the images and then ran them through a package that pulled the most prominent color from each painting and then I plotted it over a timeline.</p>
+<p>Van Gogh painted 900+ painting, each line represents the most prominent color of that painting!</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png" alt="Screen Shot 2016-03-23 at 8.16.44 AM" width="953" height="324" class="alignleft size-full wp-image-120" srcset="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png 953w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-300x102.png 300w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-768x261.png 768w" sizes="(max-width: 953px) 100vw, 953px" /></p>
+<!--
+
+
+<li><a href="http://www.mepheoscience.com/colourful-ecology-part-1-extracting-colours-from-an-image-and-selecting-them-using-community-phylogenetics-theory/" target="_blank">Colourful Ecology Part 1: Selecting colours for scientific figures from an image using community ecology methods</a></li>
+
+
+
+
+<li><a href="http://blog.martinbellander.com/post/115411125748/the-colors-of-paintings-blue-is-the-new-orange" target="_blank">The Colors of Paintings: Blue is the New Orange</a>
+</li>
+
+ 
+-->
+<p>The code that I used to scrape the images and extract the color is below:</p>
+<pre><code>#loading up all of the required library
+library(&quot;rvest&quot;)
+library(&quot;magrittr&quot;)
+## install Jo-Fai Chow&#39;s package
+require(&quot;devtools&quot;)
+install_github(&quot;ramnathv/rblocks&quot;)
+install_github(&quot;woobe/rPlotter&quot;)
+library(&quot;rPlotter&quot;)
+library(&quot;stringr&quot;)
+
+#pulling tables from wikipedia that contains the images from Van Gogh&#39;s paintings
+van_table &lt;- read_html(&quot;https://en.wikipedia.org/wiki/List_of_works_by_Vincent_van_Gogh&quot;)
+img_link &lt;- html_nodes(van_table, css = &quot;table&quot;) %&gt;% html_nodes(&quot;td:nth-child(2) a&quot;) %&gt;% html_attr(&quot;href&quot;)
+van_files &lt;- img_link[1:912] 
+van_text_split &lt;- gsub(pattern = &quot;/wiki/&quot;, replacement = &quot;&quot;, van_files) %&gt;% data.frame()
+van_data &lt;- html_nodes(van_table, xpath = &#39;//*[@id=&quot;mw-content-text&quot;]/table[1]&#39;) %&gt;% html_table() %&gt;% data.frame()
+van_data &lt;- van_data[-c(370), ]
+van_data &lt;- cbind(van_data, van_text_split)
+colnames(van_data) &lt;- c(&quot;num&quot;, &quot;img&quot;, &quot;title&quot;, &quot;year&quot;, &quot;location&quot;, &quot;img_url&quot;)
+
+#does a second call to wikipedia to pull the links to the images
+pic_list &lt;- data.frame()
+for (i in 1:length(as.character(van_data$img_url))) {
+  tryCatch({
+    img_container &lt;- read_html(paste(&quot;https://commons.wikimedia.org/wiki/&quot;, as.character(van_data$img_url[[i]]), sep = &quot;&quot;))
+    link &lt;- html_nodes(img_container, &quot;#file &gt; a&quot;) %&gt;% html_attr(&quot;href&quot;)
+    pic_list &lt;- rbind(pic_list, data.frame(i, as.character(van_data$img_url[[i]]), link))
+    print(i)
+  }, error=function(e){
+    print(&quot;error&quot;)
+    })
+}
+
+#deletes images that are corrupt and then combines that column from the pictures
+van_data &lt;- van_data[-c(592, 806, 808), ]
+van_data &lt;- cbind(van_data, pic_list)
+
+#writes a files that contains the data
+write.csv(van_data, &quot;color_extract/van_davs.csv&quot;)
+
+#downloads all the photos to local machine in order to speed up the color extraction
+sapply(1:length(as.character(van_data$link)), 
+   function(x) download.file(url=as.character(van_data$link[x]), 
+   destfile=paste(&quot;color_extract/van_paintings/&quot;, 
+   sprintf(&quot;%06d&quot;, x),sep=&quot;&quot;, &quot;.jpg&quot;), mode =&quot;wb&quot;, quiet = T))
+
+#re-reads the data about the images and also converts the factors to character
+van_data &lt;- read.csv(&quot;color_extract/van_davs.csv&quot;, header = TRUE, stringsAsFactors = TRUE)
+
+#extracts the most prominent color from each image and puts into a data.frame
+van_colors &lt;- data.frame()
+for (i in 1:length(as.character(van_data$img_url))) {
+  van_color &lt;- extract_colours(paste(&quot;color_extract/van_paintings/&quot;, sprintf(&quot;%06d&quot;, i), &quot;.jpg&quot;, sep=&quot;&quot;), 2)
+  van_colors &lt;- rbind(van_colors, t(data.frame(van_color)))
+  print(i)
+}
+
+#combines the orginal van gogh data with the extracted color data
+van_con_color &lt;- cbind(van_data, van_colors)
+write.csv(van_con_color, &quot;color_extract/van_con_color.csv&quot;)
+
+#extracts the the color and years of the painting
+simple_van &lt;- van_con_color[ ,c(4, 7,10)]
+
+#transforms the year column into useable data
+grep(&quot;\n\n\n\n&quot;, as.character(simple_van$year[2]))
+year &lt;- lapply(as.character(simple_van$year), function(x) str_extract(x, &quot;18[8-9][0-9]&quot;))
+
+#appears the modified year to a new data.frame
+simple_van_mod &lt;- simple_van
+simple_van_mod[&quot;year&quot;] &lt;- data.frame(t(data.frame(year)))
+
+#creates the barplots of color
+barplot(rep(1, 909), 
+        col=as.character(simple_van_mod$V1), 
+        bty=&quot;n&quot;, 
+        xaxt=&quot;n&quot;, 
+        yaxt=&quot;n&quot;, 
+        xlab=&quot;year&quot;, 
+        ylab=&quot;&quot;,
+        border= NA,
+        space = c(0,1)
+        )
+
+#attches the the years to the bottom of the plot and addes a title
+axis(1, at=(1:length(1:1000))[1:1200 %in% seq(1,1000,91)], labels=c(1881:1891), las=2, lwd=0, lwd.tick = 1)
+title(&quot;Vincent van Gogh&#39;s Life through Color&quot;)</code></pre>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>

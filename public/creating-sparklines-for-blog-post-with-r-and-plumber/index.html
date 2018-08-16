@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.45" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Creating Sparklines for Blog Post with R and Plumber &middot; Brettrics</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Brettrics" />
+
+ 
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/solid.css" integrity="sha384-TbilV5Lbhlwdyc4RuIV/JhD8NR+BfMrvz4BL5QFa2we1hQu6wvREr3v6XSRfCTRp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/brands.css" integrity="sha384-7xAnn7Zm3QC1jFjVc1A6v/toepoG3JXboQYzbM0jrPzou9OFXm/fY6Z/XiIebl/k" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css" integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG" crossorigin="anonymous">
+
+
+ 
+<link rel="stylesheet" href="/css/dracula.css" rel="stylesheet" id="theme-stylesheet">
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Brettrics</h1></a>
+      <p class="lead">
+      A place to explore data with all the R!
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      <li><a href="/about/"> About </a></li>
+    </ul>
+    <section class="social">
+        	
+        	&nbsp;<a href="https://facebook.com/brettkob"><i class="fab fa-facebook-f"></i></a>
+        	&nbsp;<a href="https://github.com/brettkobo"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	&nbsp;<a href="https://linkedin.com/in/brettkobo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+        	
+        	
+        	
+        	
+        	
+    </section>
+    
+    <p>&copy; 2018. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>Creating Sparklines for Blog Post with R and Plumber</h1>
+  <span class="post-date">Wed, Jul 25, 2018</span>
+  <p>One of my favorite R libraries is the <a href="https://www.rplumber.io/">plumber</a>, having the abibilty to quickly turn any of my R code into an API allows for anyone use my functions or data. Wanting to explore some use cases in the digital analytics relm for. One thing I have always been interested in was when a blog would show a trendline or spark line of an article. It is nice to see an organization being a transparent with some of the data they are collecting. It also gets to show me how late to the game I was when reading the articles. It also shows how virality kind of works, how the half-life of an articles is very shory and only in the begining.</p>
+<p>Being open with your site data puts you a bit of risk of exposing some of your company startegey but as a commumer of alot of articles, I wish I knew more about blog post to know how releivent they are and how popular they are so I can determine the value of the content. If you are writing good content, you should not be afraid of what giving up some of your data will do.</p>
+<p>So in the this blog post I will be dimstrating how to connent to the Google Analytics API using <code>googleanalyticsR</code> written by Mark Edmondson. Then using the <code>plumber</code> library for Jeff Allen to explose some of the data from Google Analytics for each article on your website. I will be showing three examples of how to write the R code to returns a raw JSON with the REST API, a htmtwidget you can plug in to your code, and a image contianing the processed blog post.</p>
+<p>The Guardian used to have these on each of its articles. It was built on top of the in-house analytics tool Ophan. So with out having to build an entire analytics system with real time streaming, we can create some spark lines from a easier assable tool.</p>
+<p>In order for you to programaticly access the data from Google Analytics, you need to set up a service account and create your own project in Google Developer Console. I could write a whole blog post on just setting up the authenication, but Mark Edmondson has done several great write ups on that. <a href="http://code.markedmondson.me/googleAnalyticsR/setup.html#service_accounts">Here</a> he will explain how to get a .json file that will be used for the crediants. The most important things is to make sure the authentication is working before you start up the API.</p>
+<p>First we are going to start by loading in the library and reading in the token that you downloaded from the Goolge Developer Console.</p>
+<pre class="r"><code>library(googleAnalyticsR) #retrived data
+library(googleAuthR) #authicating with service account
+library(sparkline) #returning sparkline htmlwidget
+library(lubridate) #work with dates easier
+library(dplyr) #manipulate data easier
+library(ggplot2) #static graphs
+
+#authicating conection to API
+gar_auth_service(&quot;google-analytics-sparkline-fbe6d3a4f4c5.json&quot;,  
+                 scope = c(&quot;https://www.googleapis.com/auth/analytics&quot;, 
+                           &quot;https://www.googleapis.com/auth/analytics.readonly&quot;))</code></pre>
+<p>After loading in the libraries and setting up the authication, I wrote some helper functions that makes it easier to call the Google Analytics API and aggeragate / shape the data.</p>
+<pre class="r"><code>#used to pull from specfic GA view
+#you can pull the view ids from your account list using ga_account_list()$viewId
+view_id &lt;- &quot;YOUR-VIEW-ID&quot;
+
+# used to reaggerage the daily data to daily to weekly or monthly. 
+aggergate_by_time_unit &lt;- function(google_analytics_data, time_unit) {
+  google_analytics_data %&gt;% 
+    mutate(date = floor_date(date, unit = time_unit)) %&gt;%
+    group_by(date) %&gt;%
+    summarise(pageviews = sum(pageviews))
+}
+
+# returns the pageviews for specific page in a aloted time rage
+retrieve_ga_data &lt;- function(start_date, end_date, page_url, view_id) {
+  google_analytics(viewId = view_id, 
+                 date_range = c(start_date, end_date), 
+                 dimensions = &quot;date&quot;,
+                 metrics = &quot;pageviews&quot;,
+                 filtersExpression = paste0(&quot;ga:pagePath==&quot;, page_url))
+}</code></pre>
+<p>After setting up the authentication and help function, we can now look at plumber and how we can use it to servce data over a REST api. Plumber has great documenation and I would recommend through it. Plumber makes it easy to turn your R code into a REST API that allow for any other application have access to what ever that R function is returning. Plumber is able to return all kinda of data, jsons, XML, images, and even HTML widgets. Similar to how roxygen turns comment into R documention, plumber used seralizer to create different parts of the API.</p>
+<p>I am going to show three ways for you to return a spark lines to your web pages. Lets start with plumber returning just a JSON.</p>
+<pre class="r"><code>#&#39; @serializer unboxedJSON
+#&#39; @get /sparklines-data
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  agg_data
+}</code></pre>
+<p>Returing a html widget of sparkline.</p>
+<pre class="r"><code>#&#39; @serializer htmlwidget
+#&#39; @get /sparklines-html
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  sparkline(agg_data$pageviews)
+}</code></pre>
+<p>Returning just plot as a .png.</p>
+<pre class="r"><code>#&#39; @get /sparklines-ggplot
+#&#39; @png (width = 140, height = 40)
+function(start_date, end_date, page_url, aggergate_by){
+  data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
+  agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
+  plot_line &lt;- agg_data %&gt;%
+    ggplot() +
+    geom_line(aes(date, pageviews), stat = &quot;identity&quot;) +
+    theme_void()
+  print(plot_line)
+}</code></pre>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>

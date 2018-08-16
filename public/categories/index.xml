@@ -2,21 +2,66 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Brettrics</title>
-    <link>https://elegant-shannon-0a4290.netlify.com/categories/</link>
+    <link>/categories/</link>
     <description>Recent content in Categories on Brettrics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>2018</copyright>
     
-	<atom:link href="https://elegant-shannon-0a4290.netlify.com/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>R</title>
-      <link>https://elegant-shannon-0a4290.netlify.com/categories/r/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      <title>Data Visualizations</title>
+      <link>/categories/data-visualizations/</link>
+      <pubDate>Wed, 31 May 2017 21:20:37 +0000</pubDate>
       
-      <guid>https://elegant-shannon-0a4290.netlify.com/categories/r/</guid>
+      <guid>/categories/data-visualizations/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Tag Manager</title>
+      <link>/categories/google-tag-manager/</link>
+      <pubDate>Mon, 08 Aug 2016 07:13:06 +0000</pubDate>
+      
+      <guid>/categories/google-tag-manager/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pixels</title>
+      <link>/categories/pixels/</link>
+      <pubDate>Mon, 08 Aug 2016 07:13:06 +0000</pubDate>
+      
+      <guid>/categories/pixels/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quantified Self</title>
+      <link>/categories/quantified-self/</link>
+      <pubDate>Wed, 31 May 2017 21:20:37 +0000</pubDate>
+      
+      <guid>/categories/quantified-self/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>/categories/r/</link>
+      <pubDate>Wed, 31 May 2017 21:20:37 +0000</pubDate>
+      
+      <guid>/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Uncategorized</title>
+      <link>/categories/uncategorized/</link>
+      <pubDate>Fri, 01 Dec 2017 23:57:20 +0000</pubDate>
+      
+      <guid>/categories/uncategorized/</guid>
       <description></description>
     </item>
     

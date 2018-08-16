@@ -1,0 +1,126 @@
+---
+title: Pixel Implementation QA with Google Speadsheets
+author: Brett Kobold
+type: post
+date: 2016-08-08T07:13:06+00:00
+url: /pixel-implementation-google-spreadsheets/
+categories:
+  - Google Tag Manager
+  - Pixels
+
+---
+
+
+
+<p><span style="font-weight: 400;">We all know pixel implementations range from being simple such as putting an image tag on a page to a complex function that dynamically takes apart your order and creates individual pixels for each of the items in your cart. Whether you are just a simple pixel pusher or an actual developer who works with tag management systems, you might find this tutorial helpful.</span></p>
+<p><span style="font-weight: 400;">Google Tag Manager is a great system to help create pixels because it allows for data to be easily appended onto the pixel. Any data that is in the dataLayer or picked up with a CSS selector can be attached to the pixel. </span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">When verifying if a pixel is working while looking in Preview mode, we are able to see what variables are attached to that pixel. In this controlled environment, we know what data is supposed to be there. But we all know that when users are on your website, that dataLayer and the CSS selector somehow picks up data we don’t want it too. This was one of the issues when I was QAing my pixel implementation, I was unaware of what data was actually being sent to the vendors. One method I knew would help would be to look at the data logs of the pixel from the vendor but getting those would prove to be difficult, so I needed another method to know what data I was sending to the vendors. </span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">After a little bit of research, I remembered that you are able to push data to Google Spreadsheet with Google Tag Manager. Using a tutorial, I adapted </span><a href="http://www.ganotes.com/pass-dynamic-data-to-google-sheets-using-google-tag-manager/" target="_blank"><span style="font-weight: 400;">Margarita Evtimova</span></a><span style="font-weight: 400;">’s method which is an adaptation of </span><a href="https://mashe.hawksey.info/2014/07/google-sheets-as-a-database-insert-with-apps-script-using-postget-methods-with-ajax-example/" target="_blank"><span style="font-weight: 400;">Martin Hawksey</span></a><span style="font-weight: 400;">’s AJAX to Google Spreadsheets program. </span></p>
+<p>I wanted to create a small database of the pixels that fire on my website, so I would have those data logs to analyse and understand if the pixel was working as expected. This database will be a reflection of the data that is sent to the vendor.</p>
+<p><span style="font-weight: 400;">To get started you will have to create a blank spreadsheet in Google Spreadsheets and then add in the column names of the data you would like to collect.<br /> </span></p>
+<p><img class="aligncenter size-full wp-image-135" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.20.28-PM.png" alt="gs_sheet" width="550" height="206" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.20.28-PM.png 550w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.20.28-PM-300x112.png 300w" sizes="(max-width: 550px) 100vw, 550px" /></p>
+<p><span style="font-weight: 400;">From there we will need to add the code that Margarita Evtimova adapted from Martin Hawksey to the Script Editor. Click Tools…Script Editor. You will see something like this.</span></p>
+<p><img class="aligncenter size-full wp-image-136" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.22.20-PM.png" alt="gs_project" width="468" height="262" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.22.20-PM.png 468w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.22.20-PM-300x168.png 300w" sizes="(max-width: 468px) 100vw, 468px" /></p>
+<p><span style="font-weight: 400;">Replace the blank code with the code below.</span></p>
+<pre><code>// Usage
+// 1. Enter sheet name where data is to be written below
+// 1. Enter sheet name and key where data is to be written below
+var SHEET_NAME = &quot;Sheet1&quot;;
+var SHEET_KEY = &quot;insert-sheet-ID-here&quot;;
+
+// 2. Run &gt; setup
+//
+// 3. Publish &gt; Deploy as web app
+// - enter Project Version name and click &#39;Save New Version&#39;
+// - set security level and enable service (most likely execute as &#39;me&#39; and access &#39;anyone, even anonymously)
+//
+// 4. Copy the &#39;Current web app URL&#39; and post this in your form/script action
+//
+// 5. Insert column names on your destination sheet matching the parameter names of the data you are passing in (exactly matching case)
+
+var SCRIPT_PROP = PropertiesService.getScriptProperties(); // new property service
+
+// If you don&#39;t want to expose either GET or POST methods you can comment out the appropriate function
+function doGet(e){
+return handleResponse(e);
+}
+
+function doPost(e){
+return handleResponse(e);
+}
+
+function handleResponse(e) {
+var lock = LockService.getPublicLock();
+lock.waitLock(30000); // wait 30 seconds before conceding defeat.
+
+try {
+// next set where we write the data - you could write to multiple/alternate destinations
+var doc = SpreadsheetApp.openById(SHEET_KEY);
+var sheet = doc.getSheetByName(SHEET_NAME);
+
+// we&#39;ll assume header is in row 1 but you can override with header_row in GET/POST data
+var headRow = e.parameter.header_row || 1;
+var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+var nextRow = sheet.getLastRow()+1; // get next row
+var row = [];
+// loop through the header columns
+for (i in headers){
+if (headers[i] == &quot;Timestamp&quot;){ // special case if you include a &#39;Timestamp&#39; column
+row.push(new Date());
+} else { // else use header name to get data
+row.push(e.parameter[headers[i]]);
+}
+}
+// more efficient to set values as [][] array than individually
+sheet.getRange(nextRow, 1, 1, row.length).setValues([row]);
+// return json success results
+return ContentService
+.createTextOutput(JSON.stringify({&quot;result&quot;:&quot;success&quot;, &quot;row&quot;: nextRow}))
+.setMimeType(ContentService.MimeType.JSON);
+} catch(e){
+// if error return this
+return ContentService
+.createTextOutput(JSON.stringify({&quot;result&quot;:&quot;error&quot;, &quot;error&quot;: e}))
+.setMimeType(ContentService.MimeType.JSON);
+} finally { //release lock
+lock.releaseLock();
+}
+}</code></pre>
+<p><span style="font-weight: 400;">After that, we will need to replace the “SHEET NAME” and “SHEET KEY” with the correct values. The “SHEET KEY” can be found in the URL of the spreadsheet you created.</span></p>
+<p><img class="aligncenter size-full wp-image-137" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.28-PM.png" alt="gs_url" width="722" height="174" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.28-PM.png 722w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.28-PM-300x72.png 300w" sizes="(max-width: 722px) 100vw, 722px" /></p>
+<p><span style="font-weight: 400;">Take that value and place it in-between the quotes.</span></p>
+<p><img class="aligncenter size-full wp-image-138" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.42-PM.png" alt="gs_code" width="435" height="165" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.42-PM.png 435w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.23.42-PM-300x114.png 300w" sizes="(max-width: 435px) 100vw, 435px" /></p>
+<p><span style="font-weight: 400;">You can also rename the “SHEET NAME” to whatever you want but make sure to rename it in the spreadsheet too. At this point, you will want to save the script with File…Save and name it whatever you want. In order to start pushing data to this spreadsheet, you will have to Publish it.</span></p>
+<p><img class="aligncenter size-full wp-image-139" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-2.09.29-PM.png" alt="pix_pickerup" width="318" height="208" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-2.09.29-PM.png 318w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-2.09.29-PM-300x196.png 300w" sizes="(max-width: 318px) 100vw, 318px" /></p>
+<p><span style="font-weight: 400;">You will need to deploy this as a web app. From here change the “Who can access this app:” to “Anyone, even anonymous”. This will allow for the pixel you created to collect data and push it to the spreadsheet. </span></p>
+<p><img class="aligncenter size-full wp-image-140" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.02-PM.png" alt="web_app" width="460" height="470" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.02-PM.png 460w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.02-PM-294x300.png 294w" sizes="(max-width: 460px) 100vw, 460px" /></p>
+<p><span style="font-weight: 400;">After you click Deploy you will be asked to authorize your app and review the permissions. Click Review Permissions, you will need to approve the Authorization. After this, you will be presented with a URL that you will need to grab because this will be the base of your pixel to submit the data.</span></p>
+<p><img class="aligncenter size-full wp-image-142" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.26-PM.png" alt="Screen Shot 2016-08-07 at 11.24.26 PM" width="459" height="280" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.26-PM.png 459w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.26-PM-300x183.png 300w" sizes="(max-width: 459px) 100vw, 459px" /></p>
+<p><span style="font-weight: 400;">The URL will look something like this:</span></p>
+<pre><code>https://script.google.com/macros/s/AKfycbwQF0g82UDBmDxFauswG5_efTh9vLewMK-LBsfY1uJ8F4yqZzS8/exec </code></pre>
+<p><span style="font-weight: 400;">From here you will hop into GTM and either create the custom image tag that will fire on the same criteria as the pixel or you will create a custom HTML tag and create the google spreadsheet pixel along side the other pixel. </span><span style="font-weight: 400;">Since Margarita shows how to create one with a Custom Image, I will show how to create one with a Custom HTML tag.</span></p>
+<p><img class="aligncenter size-full wp-image-143" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.31-PM.png" alt="gtm_code_pixelGS" width="697" height="513" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.31-PM.png 697w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.31-PM-300x221.png 300w" sizes="(max-width: 697px) 100vw, 697px" /></p>
+<p><span style="font-weight: 400;">In order for the pixel with the data to be created, you will have to use document.write(). You will notice with the code below that parameters in the URL will match the column names in the spreadsheet.</span></p>
+<pre style="background:#fff;color:#000"><span style="color:#8c868f">//  ALL THE PIXEL MAGIC! </span>
+<span style="color:#8c868f">//  </span>
+  
+<span style="color:#ff7800">var</span> hostName <span style="color:#ff7800">=</span> {{url hostname}};
+<span style="color:#ff7800">var</span> tranid <span style="color:#ff7800">=</span> {{transactionId}};
+<span style="color:#ff7800">var</span> value <span style="color:#ff7800">=</span> {{transactionValue}};
+<span style="color:#ff7800">var</span> quantity <span style="color:#ff7800">=</span> {{trasationQuantity}};
+<span style="color:#ff7800">var</span> timestamp <span style="color:#ff7800">=</span> <span style="color:#3b5bb5">Date</span>.now();
+<span style="color:#ff7800">var</span> gsPixel <span style="color:#ff7800">=</span> <span style="color:#409b1c">"https://script.google.com/macros/s/AKfycbwQF0g82UDBmDxFauswG5_efTh9vLewMK-LBfY1uJ8F4yqZzS8/exec?pixel_name=facebook"</span> <span style="color:#ff7800">+</span> <span style="color:#409b1c">"&amp;value="</span> <span style="color:#ff7800">+</span> value <span style="color:#ff7800">+</span> <span style="color:#409b1c">"&amp;quantity="</span> <span style="color:#ff7800">+</span> quantity <span style="color:#ff7800">+</span> <span style="color:#409b1c">"&amp;tranid="</span> <span style="color:#ff7800">+</span> tranid  <span style="color:#ff7800">+</span> <span style="color:#409b1c">"&amp;domainURL="</span> <span style="color:#ff7800">+</span> hostName <span style="color:#ff7800">+</span> <span style="color:#3b5bb5">window</span>.<span style="color:#3b5bb5">location</span>.<span style="color:#3b5bb5">pathname</span> <span style="color:#ff7800">+</span> <span style="color:#409b1c">"&amp;timestamp="</span> <span style="color:#ff7800">+</span> timestamp;
+  
+<span style="color:#3b5bb5">document</span>.<span style="color:#3b5bb5">write</span>(<span style="color:#409b1c">"&lt;img src='"</span> <span style="color:#ff7800">+</span> gsURL <span style="color:#ff7800">+</span> <span style="color:#409b1c">"' width='1' height='1' style='display:none'/>"</span>);
+</pre>
+<p><span style="font-weight: 400;">The pixel that is created with this URL will send the data to your spreadsheet. For this example, I have hard coded the pixel_name with “facebook”. This of course can be replaced with any value. If you are going to use this in a </span><span style="font-weight: 400;">for</span> <span style="font-weight: 400;">loop you might have to change </span><span style="font-weight: 400;">of</span> <span style="font-weight: 400;">the values to reflect the various parts of the Javascript array. </span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">To test if your code in the Google Spreadsheet is working, you can recreate the URL with whatever values you want and then see if it submits to the spreadsheet. Below I have built a test URL, when I put this URL into a new tab it posts the data into the spreadsheet. If it is successful, you will see </span><span style="font-weight: 400;">results: success. </span></p>
+<pre><code>&lt;a href=&quot;https://script.google.com/macros/s/AKfycbwQF0g82UDBmDxFauswGsd_efTh9vLewMK-BsfY1uJ8F4yqZzS8/exec?pixel_name=facebook&amp;value=23&amp;quantity=2&amp;tranid=24111521&amp;domainURL=testedu&amp;timestampURL=23420984&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;https://script.google.com/macros/s/AKfycbwQF0g82UDBmDxFauswG5_efTh9vLewMK-LBfY1uJ8F4yqZzS8/exec?pixel_name=facebook&amp;value=23&amp;quantity=2&amp;tranid=24111521&amp;domainURL=testedu&amp;timestampURL=23420984&lt;/span&gt;&lt;/a&gt;</code></pre>
+<p> </p>
+<p><img class="aligncenter size-full wp-image-144" src="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.54-PM.png" alt="gs_working" width="555" height="208" srcset="http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.54-PM.png 555w, http://www.brettrics.com/wp-content/uploads/2016/08/Screen-Shot-2016-08-07-at-11.24.54-PM-300x112.png 300w" sizes="(max-width: 555px) 100vw, 555px" /></p>
+<p>You can set your tag to fire on whatever trigger you want.</p>
+<p><span style="font-weight: 400;">For this example, I attached {{hostName}} to the pixel, so I know what domain was firing the pixel off. This can be helpful to determine if a significant amount of pixel conversions are coming from your development or testing sites. In some cases, I have attached a {{transactionId or orderId}} in order to confirm that each of the pixels can be associated with an order. </span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">Do be careful what information you attach to each of these pixels. If it is personal information about the user make sure to have encryption set up. I am still researching ways to do this.</span></p>
+<p><span style="font-weight: 400;">A good way to help you interpret how to build each of the rows, refer to the Network traffic log in your Chrome application. I was under the assumption that there is a lot of content on how to ensure a pixel implementation strategy will work but as I was doing more research, all I noticed was a large amount of individual PDFs with each vendor’s own implementation. I will be writing a separate post on how I QA pixel implementation for individual pixels. </span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">This has also helped to catch when pixels are firing blank data values and determining which page they were firing on. When your entire business is reliant on <strong>1×1 transparent GIF</strong>, it nice to have a log of which ones are firing to compare with. Some vendors have a smart enough system that can catch it but I wouldn’t depend on it.</span><span style="font-weight: 400;"><br /> </span></p>
+<p><span style="font-weight: 400;">I hope this tutorial helps you come up with some creative ways to continue to track and improve your website performance.</span></p>

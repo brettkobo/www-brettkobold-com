@@ -1,0 +1,126 @@
+---
+title: Van Gogh’s Life through his Favorite Colors
+author: Brett Kobold
+type: post
+date: 2016-03-22T03:12:38+00:00
+url: /vincent_van_gogh_color/
+categories:
+  - Data Visualizations
+
+---
+I set out to understand the life of a man through the colors he chose to use. Vincent van Gogh was an amazing painter who changed the art world more then he will ever know.
+
+> _What would life be if we had no courage to attempt anything?_ &#8211; Vincent van Gogh
+
+As Vincent declared I wanted to have the courage to keep exploring data and discover the meaning behind it. This analysis was mostly used to hone my skills and better understand the capabilities of R. As I started to explore the packages that can interoperate and manipulate color, I was curious about the colors used by famous painters. I started with Van Gogh. Luckily, I was able to find a large collection of his painting on [wikipedia][1]. From there I scraped the images and then ran them through a package that pulled the most prominent color from each painting and then I plotted it over a timeline.
+
+Van Gogh painted 900+ painting, each line represents the most prominent color of that painting!
+
+<img src="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png" alt="Screen Shot 2016-03-23 at 8.16.44 AM" width="953" height="324" class="alignleft size-full wp-image-120" srcset="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png 953w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-300x102.png 300w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-768x261.png 768w" sizes="(max-width: 953px) 100vw, 953px" />
+
+<!--
+
+
+<li><a href="http://www.mepheoscience.com/colourful-ecology-part-1-extracting-colours-from-an-image-and-selecting-them-using-community-phylogenetics-theory/" target="_blank">Colourful Ecology Part 1: Selecting colours for scientific figures from an image using community ecology methods</a></li>
+
+
+
+
+<li><a href="http://blog.martinbellander.com/post/115411125748/the-colors-of-paintings-blue-is-the-new-orange" target="_blank">The Colors of Paintings: Blue is the New Orange</a>
+</li>
+
+ 
+-->
+
+The code that I used to scrape the images and extract the color is below:
+
+    
+    #loading up all of the required library
+    library("rvest")
+    library("magrittr")
+    ## install Jo-Fai Chow's package
+    require("devtools")
+    install_github("ramnathv/rblocks")
+    install_github("woobe/rPlotter")
+    library("rPlotter")
+    library("stringr")
+    
+    #pulling tables from wikipedia that contains the images from Van Gogh's paintings
+    van_table <- read_html("https://en.wikipedia.org/wiki/List_of_works_by_Vincent_van_Gogh")
+    img_link <- html_nodes(van_table, css = "table") %>% html_nodes("td:nth-child(2) a") %>% html_attr("href")
+    van_files <- img_link[1:912] 
+    van_text_split <- gsub(pattern = "/wiki/", replacement = "", van_files) %>% data.frame()
+    van_data <- html_nodes(van_table, xpath = '//*[@id="mw-content-text"]/table[1]') %>% html_table() %>% data.frame()
+    van_data <- van_data[-c(370), ]
+    van_data <- cbind(van_data, van_text_split)
+    colnames(van_data) <- c("num", "img", "title", "year", "location", "img_url")
+    
+    #does a second call to wikipedia to pull the links to the images
+    pic_list <- data.frame()
+    for (i in 1:length(as.character(van_data$img_url))) {
+      tryCatch({
+        img_container <- read_html(paste("https://commons.wikimedia.org/wiki/", as.character(van_data$img_url[[i]]), sep = ""))
+        link <- html_nodes(img_container, "#file > a") %>% html_attr("href")
+        pic_list <- rbind(pic_list, data.frame(i, as.character(van_data$img_url[[i]]), link))
+        print(i)
+      }, error=function(e){
+        print("error")
+        })
+    }
+    
+    #deletes images that are corrupt and then combines that column from the pictures
+    van_data <- van_data[-c(592, 806, 808), ]
+    van_data <- cbind(van_data, pic_list)
+    
+    #writes a files that contains the data
+    write.csv(van_data, "color_extract/van_davs.csv")
+    
+    #downloads all the photos to local machine in order to speed up the color extraction
+    sapply(1:length(as.character(van_data$link)), 
+       function(x) download.file(url=as.character(van_data$link[x]), 
+       destfile=paste("color_extract/van_paintings/", 
+       sprintf("%06d", x),sep="", ".jpg"), mode ="wb", quiet = T))
+    
+    #re-reads the data about the images and also converts the factors to character
+    van_data <- read.csv("color_extract/van_davs.csv", header = TRUE, stringsAsFactors = TRUE)
+    
+    #extracts the most prominent color from each image and puts into a data.frame
+    van_colors <- data.frame()
+    for (i in 1:length(as.character(van_data$img_url))) {
+      van_color <- extract_colours(paste("color_extract/van_paintings/", sprintf("%06d", i), ".jpg", sep=""), 2)
+      van_colors <- rbind(van_colors, t(data.frame(van_color)))
+      print(i)
+    }
+    
+    #combines the orginal van gogh data with the extracted color data
+    van_con_color <- cbind(van_data, van_colors)
+    write.csv(van_con_color, "color_extract/van_con_color.csv")
+    
+    #extracts the the color and years of the painting
+    simple_van <- van_con_color[ ,c(4, 7,10)]
+    
+    #transforms the year column into useable data
+    grep("\n\n\n\n", as.character(simple_van$year[2]))
+    year <- lapply(as.character(simple_van$year), function(x) str_extract(x, "18[8-9][0-9]"))
+    
+    #appears the modified year to a new data.frame
+    simple_van_mod <- simple_van
+    simple_van_mod["year"] <- data.frame(t(data.frame(year)))
+    
+    #creates the barplots of color
+    barplot(rep(1, 909), 
+            col=as.character(simple_van_mod$V1), 
+            bty="n", 
+            xaxt="n", 
+            yaxt="n", 
+            xlab="year", 
+            ylab="",
+            border= NA,
+            space = c(0,1)
+            )
+    
+    #attches the the years to the bottom of the plot and addes a title
+    axis(1, at=(1:length(1:1000))[1:1200 %in% seq(1,1000,91)], labels=c(1881:1891), las=2, lwd=0, lwd.tick = 1)
+    title("Vincent van Gogh's Life through Color")
+
+ [1]: https://en.wikipedia.org/wiki/List_of_works_by_Vincent_van_Gogh

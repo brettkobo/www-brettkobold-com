@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pixels on Brettrics</title>
+    <link>/categories/pixels/</link>
+    <description>Recent content in Pixels on Brettrics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>2018</copyright>
+    <lastBuildDate>Mon, 08 Aug 2016 07:13:06 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/pixels/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pixel Implementation QA with Google Speadsheets</title>
+      <link>/pixel-implementation-google-spreadsheets/</link>
+      <pubDate>Mon, 08 Aug 2016 07:13:06 +0000</pubDate>
+      
+      <guid>/pixel-implementation-google-spreadsheets/</guid>
+      <description>We all know pixel implementations range from being simple such as putting an image tag on a page to a complex function that dynamically takes apart your order and creates individual pixels for each of the items in your cart. Whether you are just a simple pixel pusher or an actual developer who works with tag management systems, you might find this tutorial helpful.
+Google Tag Manager is a great system to help create pixels because it allows for data to be easily appended onto the pixel.</description>
+    </item>
+    
+  </channel>
+</rss>

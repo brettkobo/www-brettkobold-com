@@ -1,0 +1,46 @@
+---
+title: Analysis of TSA Claims – Less than Expected
+author: Brett Kobold
+type: post
+date: 2017-04-29T18:32:12+00:00
+url: /tsa-claims/
+categories:
+  - Data Visualizations
+  - R
+
+---
+
+
+
+<p>As I continue on my journey as an analyst, I keep running across interesting datasets. Over the last few weeks, I have been interested in various datasets around flying. So far I have found TSA claims from the past fifteen years and the number of passengers that have flown in the United States. Starting with the TSA claims, I wanted to see if I could find anything interesting.</p>
+<p>First I wanted to acknowledge that it was a bit of challenge to collect and clean this data. Even though the TSA makes it <a href="https://www.dhs.gov/tsa-claims-data">available</a>, I had to extract data from a PDF to get the most recent data and blend it into the existing Excel files. I tried to used the R library <a href="https://github.com/ropensci/tabulizer">tabulizer</a> but ran into issues with Java. I ended up using application <a href="http://tabula.technology/">Tabula</a> that is built on the same technology. All of my code will be available on my GitHub.</p>
+<p>The flight traffic data can be found on the <a href="https://www.transtats.bts.gov/Fields.asp?Table_ID=273">Bureau of Transportation Statistics website</a>.</p>
+<p>Let us get a basic understanding of the number of claims files over the last 15 years before we mix it with traffic flight information.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/dateByClaim.svg" class="aligncenter size-full" /></p>
+<p>This dataset started in 2002, which had the most claims. I suspect that the TSA inputted previous years because it is hard to imagine they have gotten that much better over the last 15 years, but I guess anything is possible.</p>
+<p>The dataset also contains the type of items that were submitted for each claim. A claim can have multiple items per claim, so I had to parse out each item and reaggregate them into a separate dataset. Below is the top items that the TSA seems to continue to damage or loose.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/itemByCount.svg" class="aligncenter size-full" /></p>
+<p>The TSA has gracious also supplied the location the incident happened. Below are the top items broken up by the location of the incident.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/itemByClaimLoc.svg" class="aligncenter size-full" /></p>
+<p>It makes me wonder what is happening to all of this stuff at the TSA checkpoints when everything is within 10 feet of you.</p>
+<p>Besides the locks, clothes, and luggage computers seem to get damaged pretty often. Either the TSA is building a super computer with all the laptops they are stealing, or traveling with laptops presents a mild risk. Seems you got better odds to bring your laptop on the plane then check it in. Recently I flew without my laptop, where I felt a bit naked, and the LAX TSA agent could not believe that I was not traveling with one. Like I actually had forgotten to take it out after they had been yelling it out 6 times in the past 10 minutes waiting.</p>
+<p>Now that we know what the TSA is taking and where they are taking it, I wanted to find out what the odds were of getting money for my broken or stolen laptop. Here is a distribution of the amount of money people claimed for specific items.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/itemByClaimMoney.svg" class="aligncenter size-full" /></p>
+<p>Here is the likelihood of getting anything for those items.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/byItemApproval.svg" class="aligncenter size-full" /></p>
+<p>Good luck ever getting your watch or MP3 player replaced!</p>
+<p>Before we get to some more interesting visuals where I combined claim data with air traffic data, I would like to give a shout out to personal injury claim in JFK on February 12th, 2008 for #3,000,000,000,000. Not surprising the claim was rejected but kudos to you personal injury claim!</p>
+<p>Moving past the ridiculous nature of that claim, I was curious to see if I could identify the airline that had the most problems with checked baggage. Below is a visual identifying Continental Airline as the airline with most claims per million passengers. This visual is only looking at checked baggage because I wanted to pinpoint the airlines that have the worst issues with checking bags in.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/claimRateByAirline.svg" class="aligncenter size-full" /></p>
+<p>Taking a step back let us see claims rates by the most popular airports. This is looking at all claims.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/claimRateByAirport.svg" class="aligncenter size-full" /></p>
+<p>It is not a surprise that JFK has the most claims per million passengers. This is where ratios can be a bit deceiving. For every million people that fly there are only about 25 claims. I am sure there is a lot of property that is lost without people reporting, but if someone damaged my MacBook Pro, you bet I would try to get at least something for it.</p>
+<p>To put this in more perspective I plotted the total airline traffic next to the number of claims.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/claimPassengers.svg" class="aligncenter size-full" /></p>
+<blockquote>
+<p>For the hundreds of millions of people who fly per year, there are relatively few incidents.</p>
+</blockquote>
+<p>One of the final areas I wanted to explore was how much traffic flew through each state per year.</p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/mapTraffic.gif" class="aligncenter size-full" /></p>
+<p><img src="http://www.brettrics.com/wp-content/uploads/2017/04/lineTraffic.gif" class="aligncenter size-full" /></p>
+<p>Even though we all like to hate on the TSA, they do manage to funnel lots of people through their gates. Good Luck TSA!</p>
