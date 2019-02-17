@@ -15,12 +15,12 @@ draft: TRUE
 <pre class="r"><code>library(bigrquery)
 library(glue)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::collapse() masks glue::collapse()
 ## ✖ dplyr::filter()   masks stats::filter()
 ## ✖ dplyr::lag()      masks stats::lag()</code></pre>
@@ -102,8 +102,7 @@ weather_data &lt;- bq_project_query(&quot;happy-weather-218500&quot;, sql_weathe
 <pre class="r"><code>ggplot(summerize_weather_data) +
   geom_line(aes(date, TMIN), color = &quot;blue&quot;) +
   geom_line(aes(date, TMAX), color = &quot;red&quot;)</code></pre>
-<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
-We can easily see the season trend and the obvious seasons. We are going to use this data to try and predict the future temperature.</p>
+<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /> We can easily see the season trend and the obvious seasons. We are going to use this data to try and predict the future temperature.</p>
 <p>Lets also get an idea of what time of year there is the most snow.</p>
 <pre class="r"><code>summerize_weather_data %&gt;%
   mutate(week_num = paste0(year(date),&quot;-&quot;, week(date)), week = week(date), day = yday(date), year = year(date)) %&gt;%
@@ -113,8 +112,7 @@ We can easily see the season trend and the obvious seasons. We are going to use 
   geom_line(aes(day, snow_avg), color = &quot;blue&quot;) +
   facet_wrap(~ year) +
   labs(title = &quot;Avg. Snow by Day in South Bend&quot;)</code></pre>
-<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-6-1.png" width="672" />
-Looks like I have a cold Febuary ahead of me…</p>
+<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-6-1.png" width="672" /> Looks like I have a cold Febuary ahead of me…</p>
 <p>Moving on to forecasting.</p>
 <p>In order to prep for understanding time series forcasting, I took the <a href="https://www.datacamp.com/courses/forecasting-using-r">Forecasting with R</a> course on DataCamp taught by the guy who built the <code>forecast</code> packing in R. It is not very often that you get to learn from the person who wrote the package. I have to be honest, there are still alot of concepts that I do not fully understand but hopefully as we work through this we both will learn something.</p>
 <p>We are trying to make it simple and predict the the minimum and maxium tempature for the next week and thirty-days. There are a few different ways to model out a timeseries, some relay on just one variable and an index others are multivariate time series forecasting. I want to start with some simple models and work our way up to the more advances ones.</p>
@@ -187,8 +185,7 @@ missing_data_cols &lt;- data.frame(var_name = rownames(na_miss), num_of_na = na_
 ggplot(missing_data_cols) +
   geom_bar(aes(var_name, perc_miss), stat = &quot;identity&quot;) +
   coord_flip()</code></pre>
-<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-15-1.png" width="672" />
-Any of the variables that have <code>WT*</code> are categorical and descritve of the weather of that day. To only work with the numerical data I am filter only for dimesions that contain less then 30% of NAs. This naturally gets rid of a few measures that are either measurements of time or measurments that do not have alot of data.</p>
+<p><img src="/post/2018-11-13-intro-to-time-series-forcasting-using-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /> Any of the variables that have <code>WT*</code> are categorical and descritve of the weather of that day. To only work with the numerical data I am filter only for dimesions that contain less then 30% of NAs. This naturally gets rid of a few measures that are either measurements of time or measurments that do not have alot of data.</p>
 <pre class="r"><code>not_many_nas &lt;- missing_data_cols %&gt;% filter(perc_miss &lt; .3) %&gt;% select(var_name) %&gt;% filter(var_name != &quot;date&quot;) %&gt;% unlist() %&gt;% unname()
 
 summerize_weather_data %&gt;% ungroup %&gt;% select(not_many_nas) %&gt;% cor(use = &quot;complete.obs&quot;) %&gt;% corrplot(na.label = &quot;.&quot;)</code></pre>
@@ -219,38 +216,11 @@ future_data$mean[1:7]</code></pre>
 #future_data$mean[1:7]
 #fit_snaive_weather$mean[1:7]
 #d$daily$temperatureLow</code></pre>
-<p>window(data, start, end) #used to split up the data into values
-ggAcf() #autocorrelation function, used to find the correlations and shows the seasonality of the data.
-Box.test(ts, lag = n, type = “Ljung”) #used to determine if the data is whitenoice, if that value is &lt; .5 it is significant that it is whitenoice
-diff() #find the difference between the values with the set lag, helpful to identify where the seasonality is</p>
-<p>autoplot() #core function used to show results of forecast package
-summary() #core function to show summary metrics about the model, this shows some of the measure that show the succuss of the model
-checkresiduals() #used to look at the residuals of a model to determine if the model has white noice and is signicant
-accuracy(model, orginal_data) #used to compare training data to orginal data to create summary statistics</p>
-<p>naive() #simplest forecasting function that takes the most recent values
-snaive() #takes into account seasonality while looking at the most recent values</p>
+<p>window(data, start, end) #used to split up the data into values ggAcf() #autocorrelation function, used to find the correlations and shows the seasonality of the data. Box.test(ts, lag = n, type = “Ljung”) #used to determine if the data is whitenoice, if that value is &lt; .5 it is significant that it is whitenoice diff() #find the difference between the values with the set lag, helpful to identify where the seasonality is</p>
+<p>autoplot() #core function used to show results of forecast package summary() #core function to show summary metrics about the model, this shows some of the measure that show the succuss of the model checkresiduals() #used to look at the residuals of a model to determine if the model has white noice and is signicant accuracy(model, orginal_data) #used to compare training data to orginal data to create summary statistics</p>
+<p>naive() #simplest forecasting function that takes the most recent values snaive() #takes into account seasonality while looking at the most recent values</p>
 <p>List all of the models used from the class.</p>
 <p><a href="https://robjhyndman.com/hyndsight/seasonal-periods/" class="uri">https://robjhyndman.com/hyndsight/seasonal-periods/</a></p>
-<p>Resources
-Time Series use Tidy Forecasting</p>
-<p>get data
-load in to tidyverse
-go from long to wide
-running corrplott
-look for corrs with tmin and tmax
-do small write up on the ts() function
-talk about univariate and multivariate models
-start with something simple like ets()
-move on to more complicated models
-show way to split data up and train it
-talk about techniques for validating data
-research more about what make a good “model”
-talk about how historical weather data is important but may not be the most important factors in the model.
-what historical weather gives us is a baseline to work with.
-talk about nessiitiy to use real time data to make more accurate forcast.
-talk about the two main competing weather models
-thoes who rule the weather forecase rule the world
-talk about how this is just an attempting to get into machine learning
-talk about weatherfun.fun, uses plumber to run a data through models and returns out out
-talk about that you really don’t know anything but this was a fun project to get you to start writing</p>
+<p>Resources Time Series use Tidy Forecasting</p>
+<p>get data load in to tidyverse go from long to wide running corrplott look for corrs with tmin and tmax do small write up on the ts() function talk about univariate and multivariate models start with something simple like ets() move on to more complicated models show way to split data up and train it talk about techniques for validating data research more about what make a good “model” talk about how historical weather data is important but may not be the most important factors in the model. what historical weather gives us is a baseline to work with. talk about nessiitiy to use real time data to make more accurate forcast. talk about the two main competing weather models thoes who rule the weather forecase rule the world talk about how this is just an attempting to get into machine learning talk about weatherfun.fun, uses plumber to run a data through models and returns out out talk about that you really don’t know anything but this was a fun project to get you to start writing</p>
 <p>weatherfun.fun - paramatize the models and use that to return the results</p>

@@ -1,5 +1,5 @@
 theme = "hyde"
-baseURL = "http://www.brettrics.com/"
+baseURL = "https://friendly-elion-bb7962.netlify.com/"
 languageCode = "en-us"
 title = "Brettrics"
 description = "A place to explore data with all the R!"

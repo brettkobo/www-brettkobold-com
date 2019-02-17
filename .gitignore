@@ -4,4 +4,4 @@
 .Ruserdata
 build_deploy.R
 .httr-oauth
-public
+public/

@@ -110,7 +110,10 @@ function(start_date, end_date, page_url, aggergate_by){
   print(plot_line)
 }</code></pre>
 <p>Similar to the htmlwidget example, you can use javascript to build the API call and then just make the src of an image tag the API call.</p>
-<p><img src="/post/2018-07-25-creating-sparklines-for-blog-post-with-r-and-plumber_files/sparklines-ggplot.png#center" /></p>
+<div class="figure">
+<img src="/post/2018-07-25-creating-sparklines-for-blog-post-with-r-and-plumber_files/sparklines-ggplot.png#center" />
+
+</div>
 <p>Now that you have a few endpoints built, you want to make sure your API is available to your site or application. <code>Plumber</code> has some <a href="https://www.rplumber.io/docs/hosting.html#digitalocean">prebuilt function</a> that make it easy to deploy and test. I would recommend using the <code>plumber::do_provision()</code> to create a droplet on DigitalOcean, this will deploy a plumber application to a virtual machine and make it assesiable. By default plumber applications will only allow an application on the same server to make a call to the API. This has to do with how plumber handles CORS. To make it easier to prototype, I like to allow my API to be called from anywhere. You can set that up using a custom function demonstrated in the <a href="https://www.rplumber.io/docs/security.html#cross-origin-resource-sharing-cors">documention</a>. Before you expose your API to a production instance, I would recommend researching how CORS work and ensure your application will be secure.</p>
 <p>Here are a few things to think about too.</p>
 <ul>
