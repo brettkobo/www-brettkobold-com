@@ -1,35 +1,36 @@
 ---
 title: Creating Sparklines for Blog Post with R and Plumber
 author: Brett Kobold
-date: '2018-07-25'
+date: '2018-08-19'
 url: creating-sparklines-for-blog-post-with-r-and-plumber
+draft: FALSE
 ---
 
 
 
-<p>One of my favorite R libraries is the <a href="https://www.rplumber.io/">plumber</a>, having the abibilty to quickly turn any of my R code into an API allows for anyone use my functions or data. Wanting to explore some use cases in the digital analytics relm for. One thing I have always been interested in was when a blog would show a trendline or spark line of an article. It is nice to see an organization being a transparent with some of the data they are collecting. It also gets to show me how late to the game I was when reading the articles. It also shows how virality kind of works, how the half-life of an articles is very shory and only in the begining.</p>
-<p>Being open with your site data puts you a bit of risk of exposing some of your company startegey but as a commumer of alot of articles, I wish I knew more about blog post to know how releivent they are and how popular they are so I can determine the value of the content. If you are writing good content, you should not be afraid of what giving up some of your data will do.</p>
-<p>So in the this blog post I will be dimstrating how to connent to the Google Analytics API using <code>googleanalyticsR</code> written by Mark Edmondson. Then using the <code>plumber</code> library for Jeff Allen to explose some of the data from Google Analytics for each article on your website. I will be showing three examples of how to write the R code to returns a raw JSON with the REST API, a htmtwidget you can plug in to your code, and a image contianing the processed blog post.</p>
-<p>The Guardian used to have these on each of its articles. It was built on top of the in-house analytics tool Ophan. So with out having to build an entire analytics system with real time streaming, we can create some spark lines from a easier assable tool.</p>
-<p>In order for you to programaticly access the data from Google Analytics, you need to set up a service account and create your own project in Google Developer Console. I could write a whole blog post on just setting up the authenication, but Mark Edmondson has done several great write ups on that. <a href="http://code.markedmondson.me/googleAnalyticsR/setup.html#service_accounts">Here</a> he will explain how to get a .json file that will be used for the crediants. The most important things is to make sure the authentication is working before you start up the API.</p>
-<p>First we are going to start by loading in the library and reading in the token that you downloaded from the Goolge Developer Console.</p>
-<pre class="r"><code>library(googleAnalyticsR) #retrived data
-library(googleAuthR) #authicating with service account
+<p>One of my favorite R libraries is <a href="https://www.rplumber.io/">plumber</a>, it has the abibilty to quickly turn any of my R code into an a REST API allowing for anyone to use my function functions or access my data in a restful manor. I wanted to explore some use cases in the digital analytics relm for creating my own API. One thing I have always been interested in was when a blog or new site would show a trendline or spark line of the number of readers or pageviews of an article. It is nice to see an organization being a transparent with some of the data they are collecting and surfacing it back to the users. As a consumer of content, it helps me understand the popularity of that peices and can help me protize where I should start reading. Another great example of when data is returned to the user is a site showing how many times a specfic lines has been highlighted or tweeted.</p>
+<p>Being open with your site data puts you a bit of risk of exposing some of your company startegey but as a consumer of alot of articles, I wish I knew more about blog post to know how releivent they are and how popular they are so I can determine the value of the content. If you are writing good content, you should not be afraid of what giving up some of your data will do.</p>
+<p>So in the this blog post I will be demostrating how to connent to the Google Analytics API using <a href="http://code.markedmondson.me/googleAnalyticsR/"><code>googleAnalyticsR</code></a> written by Mark Edmondson. Then how to use the <code>plumber</code> library for Jeff Allen to explose some of the data from Google Analytics for each article on your website. I will be showing three examples of how to write the R functions that returns a JSON, a htmtwidget you can plug in to your code, or a images containing a visualization all with a REST API.</p>
+<p>In order for you to programaticly access the data from Google Analytics, you need to set up a service account and create your own project in Google Developer Console. I could write a whole blog post on just setting up the authenication, but Mark Edmondson has done several great write ups on that. <a href="http://code.markedmondson.me/googleAnalyticsR/setup.html#service_accounts">Here</a> he will explain how to get a .json file from the Google Cloud Console (GCC) that will be used for the crediants. Make sure to add the email that is generated from the GCC as a user to your Google Analytics property.</p>
+<p>The most important things is to make sure the authentication is working before you start up the API. You can test that by using <code>googleAuthR::gar_auth_service()</code> to read the credintial file and setting the scope. After that run a function to retrieve some data from the Google Analytics API, if your authication worked you will get some data, if not you will get a fairly descripe error message of what went wrong. Some common errors I ran into is setting up the scope correctly, that particular service account didn’t have access to my GA instance, or I didn’t give the GCC project the correct access to the APIs. Now we can move on to set up our API.</p>
+<p>First we are going to start by loading in the libraries and reading in the token that you downloaded from the GCC.</p>
+<pre class="r"><code>library(googleAnalyticsR) #reading data from Google Analytics
+library(googleAuthR) #authicating Google apps with service account
 library(sparkline) #returning sparkline htmlwidget
 library(lubridate) #work with dates easier
 library(dplyr) #manipulate data easier
 library(ggplot2) #static graphs
 
-#authicating conection to API
+#authicating conection to API 
 gar_auth_service(&quot;google-analytics-sparkline-fbe6d3a4f4c5.json&quot;,  
                  scope = c(&quot;https://www.googleapis.com/auth/analytics&quot;, 
-                           &quot;https://www.googleapis.com/auth/analytics.readonly&quot;))</code></pre>
-<p>After loading in the libraries and setting up the authication, I wrote some helper functions that makes it easier to call the Google Analytics API and aggeragate / shape the data.</p>
+                           &quot;https://www.googleapis.com/auth/analytics.readonly&quot;)) #only giving this token the ability to read data</code></pre>
+<p>After loading in the libraries and setting up the authication, I wrote some helper functions that makes it easier to call the Google Analytics API and aggeragate / shape the data to make it easier for a sparklines to consume. Make sure to get your view id for the specific view you want data from.</p>
 <pre class="r"><code>#used to pull from specfic GA view
 #you can pull the view ids from your account list using ga_account_list()$viewId
 view_id &lt;- &quot;YOUR-VIEW-ID&quot;
 
-# used to reaggerage the daily data to daily to weekly or monthly. 
+# used to reaggregate the daily data from daily to weekly or monthly. 
 aggergate_by_time_unit &lt;- function(google_analytics_data, time_unit) {
   google_analytics_data %&gt;% 
     mutate(date = floor_date(date, unit = time_unit)) %&gt;%
@@ -45,25 +46,59 @@ retrieve_ga_data &lt;- function(start_date, end_date, page_url, view_id) {
                  metrics = &quot;pageviews&quot;,
                  filtersExpression = paste0(&quot;ga:pagePath==&quot;, page_url))
 }</code></pre>
-<p>After setting up the authentication and help function, we can now look at plumber and how we can use it to servce data over a REST api. Plumber has great documenation and I would recommend through it. Plumber makes it easy to turn your R code into a REST API that allow for any other application have access to what ever that R function is returning. Plumber is able to return all kinda of data, jsons, XML, images, and even HTML widgets. Similar to how roxygen turns comment into R documention, plumber used seralizer to create different parts of the API.</p>
-<p>I am going to show three ways for you to return a spark lines to your web pages. Lets start with plumber returning just a JSON.</p>
-<pre class="r"><code>#&#39; @serializer unboxedJSON
+<p>After setting up the authentication and helper function, we can now look at<code>plumber</code>and how we can use it to return data over a REST API.<code>plumber</code>has great documenation and I would recommend through it. <code>plumber</code> makes it easy to turn your R code into a REST API that allow for any other application have access to what ever that R function is returning. It is able to return all kinda of data like json, images, and even HTML widgets. Similar to how roxygen2 turns comments into R documention, <code>plumber</code> uses special comments to create different parts of the API.</p>
+<p>I am going to show three ways for you to return a spark lines to your web pages. Lets start with <code>plumber</code> returning just a JSON.</p>
+<p>You can think of <code>plumber</code> as just a R function that is decorated with some additional paramaters that supplies input for the API. Our <code>plumber</code> API functions are going to call the Google Analytics API using the helper function, reshape the data by the given time unit and returning the data, htmlwidget, or image. I would recommend at least reading the begining of the <code>plumber</code> <a href="https://www.rplumber.io/docs/index.html">documention</a> to understand the basics of the library.</p>
+<p>The comments you see below consist of a description of the API endpoint, definition for each paramater, the name of the endpoint, and sometimes the seralizer used to tell what type of data you are returning with that endpoint. There are additonal special comments that modify the API endpoint further, those can be found <a href="https://www.rplumber.io/docs/rendering-and-output.html#serializers">here</a>.</p>
+<p>This endpoiunt specifily will return a JSON object of the data from Google Analytics for that specific page.</p>
+<pre class="r"><code>#&#39; Returns JSON of pageviews of specifc page in Google Analytics by given measurement of time.
+#&#39; @param start_date date for the begining of timerange | format(YYYY-MM-DD)
+#&#39; @param end_date date for the end of timerange | format(YYYY-MM-DD)
+#&#39; @param page_url used as filter to return data for specific page url
+#&#39; @param aggergate_by aggerage data by day, week, month, or year
 #&#39; @get /sparklines-data
 function(start_date, end_date, page_url, aggergate_by){
   data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
   agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
   agg_data
 }</code></pre>
-<p>Returing a html widget of sparkline.</p>
-<pre class="r"><code>#&#39; @serializer htmlwidget
+<p>Here is an example of the JSON that will be spit out. <code>Plumber</code> by default will run <code>jsonlite::toJSON</code> on the object you are trying to return. Since the Google Analytics API returns a data frame, the <code>toJSON</code> function will convert that dataframe into an endpoint like this.</p>
+<p><img src="/post/2018-07-25-creating-sparklines-for-blog-post-with-r-and-plumber_files/Screen Shot 2018-08-16 at 6.40.02 PM.png#center" width = "30%"/></p>
+<p>One feature I am still exploring is how to get the data exactly like I would like it to. Converting a data.frame back into a JSON object comes with a few challenages and I need to learn more about how to effectively convert data.frames into an easy to use JSON file. This would be a great time for me to read up on Jenny Bryan’s talks and blog posts on list. I found this <a href="https://www.rstudio.com/resources/videos/data-rectangling/">talk</a> in particular ineresting for working with lists.</p>
+<p>The great part about <code>plumber</code> is you can return almost any data type and what ever structure you want. So if you also wanted to inlude another piece of data about the traffic sources, you can create nested lisst that contain the pageview history and the traffic sources for that specific page. Building an API is as flexable as you want it to be.</p>
+<p>As I stated earlier, you can also return HTML widgets with <code>plumber</code>. You will see all that it requres is the adding the <code>#' @serializer htmlwidget</code> comment, then wrapping the data in the <code>sparkline::sparkline()</code> function. This will return a self-contained html file with the already processed data.</p>
+<pre class="r"><code>#&#39; Returns a htmlwidget of a sparkline for a specifc page in Google Analytics by given measurement of time.
+#&#39; @param start_date date for the begining of timerange | format(YYYY-MM-DD)
+#&#39; @param end_date date for the end of timerange | format(YYYY-MM-DD)
+#&#39; @param page_url used as filter to return data for specific page url
+#&#39; @param aggergate_by aggerage data by day, week, month, or year
 #&#39; @get /sparklines-html
+#&#39; @serializer htmlwidget
 function(start_date, end_date, page_url, aggergate_by){
   data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
   agg_data &lt;- aggergate_by_time_unit(data, time_unit = aggergate_by)
-  sparkline(agg_data$pageviews)
+  sparkline::sparkline(agg_data$pageviews)
 }</code></pre>
-<p>Returning just plot as a .png.</p>
-<pre class="r"><code>#&#39; @get /sparklines-ggplot
+<p>Here is an example of that output.</p>
+{{% frame location="/frames/example_sparkline.html" width="100%" height="60px" %}}
+<p>There are several ways to serve this on a web page. One way is to render it in an iframe. Below is some sample code that does that. This code will make a call to your API and return an htmlwidget of what ever you submited in an iframe. Iframe are not the easiest thing to work with but is an option. If you are haivng issue with the iframe, I would recommend using retriving the JSON verison of this API and then use the corresponding javascript library to rebuild the visual.</p>
+<pre class="javascript"><code>&lt;body&gt;
+      &lt;iframe id=&quot;da-iframe&quot; width=&quot;100%&quot;&gt;&lt;/iframe&gt;
+      &lt;script&gt;
+        var frame = document.getElementById(&quot;da-iframe&quot;)
+        var page_url = document.pathPath
+        var start_date = ...
+        var end_date = ...
+        iframe.src = &quot;http://localhost:9999/cool-api-name&quot;
+      &lt;/script&gt;
+ &lt;/body&gt;</code></pre>
+<p>If you do not want your visual to be interactive or want to render the data using javascript, you can also use<code>plumber</code>to return a image. Using the same template, you can have the final part of the API function a PNG. You can also get the width and height of the iamges with the <code>#' @png</code> comment.</p>
+<pre class="r"><code>#&#39; Returns an image of a sparkline for a specifc page in Google Analytics by given measurement of time.
+#&#39; @param start_date date for the begining of timerange | format(YYYY-MM-DD)
+#&#39; @param end_date date for the end of timerange | format(YYYY-MM-DD)
+#&#39; @param page_url used as filter to return data for specific page url
+#&#39; @param aggergate_by aggerage data by day, week, month, or year
+#&#39; @get /sparklines-ggplot
 #&#39; @png (width = 140, height = 40)
 function(start_date, end_date, page_url, aggergate_by){
   data &lt;- retrieve_ga_data(start_date, end_date, page_url, view_id = view_id)
@@ -74,3 +109,13 @@ function(start_date, end_date, page_url, aggergate_by){
     theme_void()
   print(plot_line)
 }</code></pre>
+<p>Similar to the htmlwidget example, you can use javascript to build the API call and then just make the src of an image tag the API call.</p>
+<p><img src="/post/2018-07-25-creating-sparklines-for-blog-post-with-r-and-plumber_files/sparklines-ggplot.png#center" /></p>
+<p>Now that you have a few endpoints built, you want to make sure your API is available to your site or application. <code>Plumber</code> has some <a href="https://www.rplumber.io/docs/hosting.html#digitalocean">prebuilt function</a> that make it easy to deploy and test. I would recommend using the <code>plumber::do_provision()</code> to create a droplet on DigitalOcean, this will deploy a plumber application to a virtual machine and make it assesiable. By default plumber applications will only allow an application on the same server to make a call to the API. This has to do with how plumber handles CORS. To make it easier to prototype, I like to allow my API to be called from anywhere. You can set that up using a custom function demonstrated in the <a href="https://www.rplumber.io/docs/security.html#cross-origin-resource-sharing-cors">documention</a>. Before you expose your API to a production instance, I would recommend researching how CORS work and ensure your application will be secure.</p>
+<p>Here are a few things to think about too.</p>
+<ul>
+<li>You can run any functions or libraries on your data before you return it with an API. An example would be running a forecasting function on your pageviews to see how they will perform in the future.</li>
+<li>This example can be extended from any analytics system like Adobe Analytics or Snowplow.</li>
+<li>You might want too obfucate your data to hide the actual values. One way you can do this is divide each row by the total sum of the range to get a percent of whole. This will give you the same sparkline as if you used the actual values.</li>
+</ul>
+<p>Hopefully you found this blog post helpful and it will inspire you to liberate some of your data back to your users. This is an intro to<code>plumber</code>and there are almost unlimted number of use cases for turning your R code into an API. Let me know if you found this blog post helpful and what you have built with plumber.</p>

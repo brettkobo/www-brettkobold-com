@@ -5,6 +5,7 @@ title = "Brettrics"
 description = "A place to explore data with all the R!"
 copyright = "2018"
 enableEmoji = "true"
+disqusShortname = "brettrics"
 
 [[menu.main]]
     name = "About"

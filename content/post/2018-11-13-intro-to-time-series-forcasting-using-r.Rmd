@@ -1,0 +1,300 @@
+---
+title: Intro to Time Series Forcasting using R
+author: Brett Kobold
+date: '2018-11-13'
+slug: intro-to-time-series-forcasting-using-r
+draft: TRUE
+---
+
+In my opinon, one of the most power skills is the ability to predict the future. As I have gotten further into my data career, I have started to get involved with the data science side of the industry. One of the first course I have taken on the machine learning is forcasting time series data using R. 
+
+Here I am going to walk through the basics of time series forecasting using the forecast package. There are sill some concepts I do not fully understand but I am going to walk through the basic steps of forecasting a time series. One of my favorite data sets in weather data, the NOAA is a US government agency that focuses on the condition of the oceans, major waterways, and atmosphere. They provide a pletha of open data sets so scientist have access to their information. One particular data set I enjoy using it is the NOAA GCHD, the global daily weather. Their API is not my favorite and returns data that is not easily consumable. Luckily Google Big Query has stored the data allowing us to access it with simple SQL. 
+
+The data is stored by year across multiply tables, using special logic from BigQuery we can query across multiply tables. This data set consists of stations ID, timestamps, and various data attributes about the weather like minimum and maximum temperature, amount of rain, amount of snow, and wind speed. It contains ALOT of different attributes. This make it a perfect dataset to practice time series forcasting on. To get a full list of the attributes, visit here
+
+With a new feature that just launch in July 2018, we are now able to query by searching for data points in a certain radius. First episode search for all stations the first step is to search for all stations within 30 miles of a single GPS point. That will return a list of ID that we will query the data with.
+
+```{r}
+library(bigrquery)
+library(glue)
+library(tidyverse)
+library(ggmap)
+library(lubridate)
+library(forecast)
+
+lat <- -86.25001
+lon <- 41.68338
+
+sql_nearest_stations_table <- glue("
+WITH params AS (
+  SELECT ST_GeogPoint({lat},{lon}) AS center,
+         50 AS maxdist_km
+),
+
+distance_from_center AS (
+  SELECT
+    id,
+    name,
+    state,
+    longitude,
+    latitude,
+    ST_GeogPoint(longitude, latitude) AS loc,
+    ST_Distance(ST_GeogPoint(longitude, latitude), params.center) AS dist_meters
+  FROM
+    `bigquery-public-data.ghcn_d.ghcnd_stations`,
+    params
+  WHERE ST_DWithin(ST_GeogPoint(longitude, latitude), params.center, params.maxdist_km*1000))")
+
+sql_nearest_stations_data <- "select 
+id, 
+name, 
+state, 
+longitude, 
+latitude,
+dist_meters
+FROM distance_from_center"
+
+
+near_stations_data <- bq_project_query("happy-weather-218500", glue(sql_nearest_stations_table, sql_nearest_stations_data, .sep = " ")) %>% bq_table_download()
+```
+
+
+We can do a quick plot of those to show how the radial search works. These are all of the stations with in 30 miles of the center of South Bend. Some of these satations only return certain data points, so to get an accurate sample I like to query multiply stations and get the average values distributes across that set. 
+
+
+**Locations of Weather Stataions**
+```{r message=FALSE, warning=FALSE}
+
+qmplot(longitude, latitude, data = near_stations_data, color = I("red"), main = "Location of Weather Stations") +
+  ggtitle("Location of Weather Stations") +
+  labs(x = "another chance")
+
+```
+
+Currently the the data is stored in a long format where each row is an observation for that station with a timestamp. I normally only look at the temperature, amount of snow, and amount of rain but sense we are looking to build some models, we are going to pull all of the data.
+
+To query across multiply tables we can use a regex to determine a pattern for the years we are looking at. In order to make this simple, lets query about the last 20 years of data.
+
+Using the queru from ealier we are able to query just the stations that are with-in 30 miles of South Bend. To get the historical data, BigQuery has a unique function that allows for you to query across multiple tables. The NOAA GCHN data is stored by year in each table. Check out the (documention)[google-docs/bigquery] to learn more about it. The gist of it is you are able to use a * as regular expression to query across multiple tables.
+
+```{r}
+sql_weather_data <- glue(sql_nearest_stations_table,
+  "
+    SELECT
+    weather.*,
+    station.dist_meters AS dist
+  FROM
+    `bigquery-public-data.ghcn_d.ghcnd_20*` AS weather
+  JOIN distance_from_center AS station ON weather.id = station.id
+# WHERE
+#    DATE_DIFF(CURRENT_DATE(), weather.date, DAY) < 30")
+
+#submit query to bigquery
+weather_data <- bq_project_query("happy-weather-218500", sql_weather_data) %>% bq_table_download()
+```
+
+
+To make the data easier to use, we need to convert the long data into wide data. Also to summerize the data by day across the various weather stations, we will take the mean of each of the values. Each of different values has a definations, you can find that on the (NOAA website)[noaa.com/defincation]. 
+```{r}
+summerize_weather_data <- weather_data %>%
+  select(date, element, value) %>%
+  group_by(date, element) %>%
+  summarise(value = mean(value, na.rm = TRUE)) %>%
+  spread(element, value) %>%
+  mutate(TMIN = ((TMIN/10)*9/5)+32, TMAX = ((TMAX/10)*9/5)+32) %>% #converting the tempature from C to F
+  ungroup()
+```
+
+
+Lets get an idea of the historical tempature in South Bend. 
+```{r fig.align="center"}
+ggplot(summerize_weather_data) +
+  geom_line(aes(date, TMIN), color = "blue") +
+  geom_line(aes(date, TMAX), color = "red")
+```
+We can easily see the season trend and the obvious seasons. We are going to use this data to try and predict the future temperature.
+
+Lets also get an idea of what time of year there is the most snow. 
+
+```{r}
+
+summerize_weather_data %>%
+  mutate(week_num = paste0(year(date),"-", week(date)), week = week(date), day = yday(date), year = year(date)) %>%
+  group_by(year, day) %>%
+  summarise(snow_avg = mean(SNOW, na.rm = TRUE), rain_avg = mean(PRCP, na.rm = TRUE)) %>%
+  ggplot() +
+  geom_line(aes(day, snow_avg), color = "blue") +
+  facet_wrap(~ year) +
+  labs(title = "Avg. Snow by Day in South Bend")
+  
+```
+Looks like I have a cold Febuary ahead of me...
+
+Moving on to forecasting.
+
+In order to prep for understanding time series forcasting, I took the [Forecasting with R](https://www.datacamp.com/courses/forecasting-using-r) course on DataCamp taught by the guy who built the `forecast` packing in R. It is not very often that you get to learn from the person who wrote the package. I have to be honest, there are still alot of concepts that I do not fully understand but hopefully as we work through this we both will learn something. 
+
+We are trying to make it simple and predict the the minimum and maxium tempature for the next week and thirty-days. There are a few different ways to model out a timeseries, some relay on just one variable and an index others are multivariate time series forecasting. I want to start with some simple models and work our way up to the more advances ones. 
+
+First we will have to convert our data to the proper type, forecasting using the ts() function to convert the data to a `mts` object. Understanding the ts() function will help alot in the forecasting modeling. You are able to pass a single vector, matrix, or data.frame into the function. It consists of those values and an index. The other required parameters are “start”, “end”, and “freq”.  “Start” and “End” are the beginning and ends points of your time series. The “frequency” is the number of observations per “season”. The still confusing me a bit but from what I understand you can use this format to deal with different types of timeseries. Since we are are going to be using daily weather data we will set up our time series. I would recommend reading up on that blog post to fully understand how to use freq.
+
+```{r}
+daily_weather_data <- summerize_weather_data %>% ungroup() %>% select(-date) %>% ts(start = 2000, end = 2018, freq = 365) 
+
+daily_weather_data_ms <- summerize_weather_data %>% ungroup() %>% select(-date) %>%  msts(start = 2000, end = 2018, seasonal.periods=c(7,365.25))
+
+```
+
+We can use the built in functions of forecast to visualize the data. Use autoplot() to get a better idea of seasonility. Now that we are done with loading out data in, we can now start to look at models.
+
+```{r}
+daily_weather_data[,c("TMIN","TMAX")] %>% autoplot()
+```
+
+From what I have learned so far we can use two different types of forecasting, univariate and multivariate. Univariate models can be used to when you want to model just one variable. For example we are going to use an univariate model to start with modeling temperature. Later on we can use multivariate to include other weather variables. 
+
+There are lot of different aspects to time series forecasting so I am going to try to go over the basic. We want to see if we can look at the patterns in the data and try to forecast the future values. Some of the simple models we are going to explore are: 
+
+Naive
+```{r}
+fit_naive_weather <- naive(daily_weather_data[,"TMIN"], h = 265) %>% autoplot()
+```
+
+Snaive
+```{r}
+fit_snaive_weather <- snaive(daily_weather_data[,"TMIN"], h = 265)
+```
+
+
+Auto ARIMA
+
+```{r}
+fit_auto_armina_weather <- auto.arima(daily_weather_data[,"TMIN"], lambda = 0)
+checkresiduals(fit_auto_armina_weather)
+summary(fit_auto_armina_weather)
+
+fit_auto_armina_weather %>% forecast(h = 265) %>% autoplot()
+```
+
+Using stlf and ets
+```{r}
+fit_ets_weather <- stlf(daily_weather_data_ms[,"TMIN"])
+fit_ets_weather %>% forecast(h = 265) %>% autoplot()
+```
+
+
+Holts Winter
+```{r}
+#fit_holts_weather <- hw(daily_weather_data_ms[,"TMIN"], seasonal = "additive", h = 265)
+#autoplot(fit_holts_weather)
+```
+TBATS
+```{r}
+fit_tbats_weather <- tbats(daily_weather_data[,"TMIN"], seasonal.periods = c(7,365.25), use.parallel = TRUE)
+fit_tbats_weather %>% forecast(h = 365) %>% autoplot()
+```
+
+Correlation Plot Values
+
+```{r}
+library(corrplot)
+
+na_miss <- sapply(summerize_weather_data, function(x) sum(is.na(x))) %>% data.frame(value = .)
+
+missing_data_cols <- data.frame(var_name = rownames(na_miss), num_of_na = na_miss$value) %>% 
+  mutate(perc_miss = num_of_na/nrow(summerize_weather_data), var_name = as.character(var_name))
+
+ggplot(missing_data_cols) +
+  geom_bar(aes(var_name, perc_miss), stat = "identity") +
+  coord_flip()
+```
+ Any of the variables that have `WT*` are categorical and descritve of the weather of that day. To only work with the numerical data I am filter only for dimesions that contain less then 30% of NAs. This naturally gets rid of a few measures that are either measurements of time or measurments that do not have alot of data.
+
+
+```{r}
+not_many_nas <- missing_data_cols %>% filter(perc_miss < .3) %>% select(var_name) %>% filter(var_name != "date") %>% unlist() %>% unname()
+
+summerize_weather_data %>% ungroup %>% select(not_many_nas) %>% cor(use = "complete.obs") %>% corrplot(na.label = ".")
+```
+
+It looks like there is a relationship between tempature, amount of snow, average wind speed. We are going to take some of these values and pluf them into a regression model along side the ARMINA model
+
+
+```{r}
+
+
+short <- window(daily_weather_data, start = 2017)
+
+xreg <- cbind(#snow_mm = short[, "SNOW"], 
+              #snow_depth = short[, "SNWD"],
+              #rain_mm = short[, "PRCP"],
+              wind_speed = short[, "AWND"])
+
+
+n = 30
+snow_pred <- snaive(daily_weather_data[,"SNOW"], h = n)
+rain_pred <- snaive(daily_weather_data[,"PRCP"], h = n)
+
+fit_dynamic_reg_weather <- tslm(formula = TMIN ~ season + trend, data = daily_weather_data)
+fit_dynamic_reg_weather <- tslm(formula = TMIN ~ SNOW + PRCP, data = daily_weather_data)
+
+future_data <- forecast(fit_dynamic_reg_weather, newdata = data.frame(SNOW = snow_pred$mean, PRCP = rain_pred$mean), h = 700)
+
+future_data$mean[1:7]
+```
+
+```{r}
+#library(darksky)
+#d <- get_current_forecast(lon, lat)
+#future_data$mean[1:7]
+#fit_snaive_weather$mean[1:7]
+#d$daily$temperatureLow
+```
+
+window(data, start, end) #used to split up the data into values
+ggAcf() #autocorrelation function, used to find the correlations and shows the seasonality of the data.
+Box.test(ts, lag = n, type = “Ljung”) #used to determine if the data is whitenoice, if that value is < .5 it is significant that it is whitenoice
+diff() #find the difference between the values with the set lag, helpful to identify where the seasonality is
+
+autoplot() #core function used to show results of forecast package
+summary() #core function to show summary metrics about the model, this shows some of the measure that show the succuss of the model
+checkresiduals() #used to look at the residuals of a model to determine if the model has white noice and is signicant
+accuracy(model, orginal_data) #used to compare training data to orginal data to create summary statistics
+
+
+naive() #simplest forecasting function that takes the most recent values 
+snaive() #takes into account seasonality while looking at the most recent values
+
+List all of the models used from the class.
+
+
+https://robjhyndman.com/hyndsight/seasonal-periods/
+
+Resources
+Time Series use Tidy Forecasting 
+
+
+get data
+load in to tidyverse
+go from long to wide
+running corrplott
+look for corrs with tmin and tmax
+do small write up on the ts() function
+talk about univariate and multivariate models
+start with something simple like ets()
+move on to more complicated models
+show way to split data up and train it
+talk about techniques for validating data
+research more about what make a good “model”
+talk about how historical weather data is important but may not be the most important factors in the model.
+what historical weather gives us is a baseline to work with.
+talk about nessiitiy to use real time data to make more accurate forcast.
+talk about the two main competing weather models
+thoes who rule the weather forecase rule the world
+talk about how this is just an attempting to get into machine learning
+talk about weatherfun.fun, uses plumber to run a data through models and returns out out
+talk about that you really don’t know anything but this was a fun project to get you to start writing
+
+
+weatherfun.fun - paramatize the models and use that to return the results 
+

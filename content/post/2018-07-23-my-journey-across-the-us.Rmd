@@ -3,6 +3,7 @@ title: My Journey Across the US
 author: Brett Kobold
 date: '2018-07-23'
 url: my-journey-across-the-us
+draft: TRUE
 ---
 
 Recent I moved across the United States with my wife and dog. Previously I lived in Pasadena, CA and now I am in South Bend, IN. After doing alot of packing and coordinatoring large cubes shippments we were off from California to Indiana. I was wanting to do something with data and collection for the drive across. So in my phone I set up a [Tasker](https://tasker.joaoapps.com/) app to record a file of alot of different variables that phones collect. Some of the more interesting ones are GPS, elevation, speed, and even list of wi-fi networks. Alot of the variables I was collecting were either consistant or moot, so I am not going to even talk about them. 
