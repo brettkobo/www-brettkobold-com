@@ -2,14 +2,13 @@
 title: Stray dogs in Los Angeles, CA
 author: Brett Kobold
 type: post
-date: 2016-02-24T17:19:32+00:00
-url: /stary_dogs_in_la/
+date: 2016-02-24
+slug: /stary-dogs-in-la/
+description: "Using publicly available data about the stray animals in Los Angeles, we take a look at the trends about the cities stray dogs."
 categories:
   - Data Visualizations
 
 ---
-<div>
-  Every day stray dogs are picked up and brought in to animal shelters in Los Angeles, CA. Who are these dogs? How many of them were abandoned? Below is a data visualization with data from the <a href="https://data.lacity.org/" target="_blank">Los Angeles Data Portal</a>.
-</div>
+Every day stray dogs are picked up and brought in to animal shelters in Los Angeles, CA. Who are these dogs? How many of them were abandoned? Below is a data visualization with data from the [https://data.lacity.org/](Los Angeles Data Portal).
 
 `r blogdown::shortcode('tableau', vizId = 'viz1532442378946', name = 'LosAngeles-StaryDogs/LosAngelesStrayDogs', height = "900px")`

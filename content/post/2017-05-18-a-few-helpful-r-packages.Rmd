@@ -2,10 +2,9 @@
 title: A Few Helpful R Packages
 author: Brett Kobold
 type: post
-date: 2017-05-18T05:02:51+00:00
+date: 2017-05-18
 url: /a-few-helpful-r-packages/
-categories:
-  - Uncategorized
+description: "Some helpful R packages that I use in almost every analysis I run."
 
 ---
 There are a few packages in R that I wish I was exposed to earlier, if I had an understanding of these packages earlier I would have been on Stack Overflow less. These are some of the most common packages that I use.
@@ -18,6 +17,7 @@ There are a few packages in R that I wish I was exposed to earlier, if I had an 
   * [lubridate][6] #dates
   * [stringr][7] #strings 
   * [tidytext][8] #moreStrings
+  
 This list will continue to grow as I think of more packages.
 
  [1]: http://tidyverse.org/

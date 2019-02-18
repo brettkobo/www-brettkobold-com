@@ -2,8 +2,9 @@
 title: This American Life – Visualized pt. 2
 author: Brett Kobold
 type: post
-date: 2016-02-28T18:55:55+00:00
+date: 2016-02-28
 url: /tal-speaking-rate/
+description: "A look at the average speaking rate of our beloved podcast host, Ira Glass."
 categories:
   - Data Visualizations
 

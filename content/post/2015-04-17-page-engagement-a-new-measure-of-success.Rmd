@@ -1,8 +1,10 @@
 ---
 title: "Page Engagement: A New Measure of Success"
-author: Brett Kobold
-date: 2015-04-17T04:00:31+00:00
-url: /page-engagement-a-new-measure-of-success/
+author: "Brett Kobold"
+date: "2015-04-17"
+type: "post"
+slug: "/page-engagement-a-new-measure-of-success/"
+description: "Looking beyond pageviews, page enagment is a true way to measure the value of your content."
 ---
 
 One of the biggest questions in web analytics right now is “How do we know users are reading or looking at our content?” In the past, Liferay has used “page views” and “number of clicks” to determine the popularity of our content, but we’re now learning that these methods do not necessarily determine the success of a page. Page views show how users are navigating through your site, but they will not provide the strongest insight about what they are truly interested in.
@@ -21,10 +23,7 @@ One of the best tools I have found so far to help measure active engagement time
 
 **Additional Sources:**
 
-  * <https://medium.com/data-lab/mediums-metric-that-matters-total-time-reading-86c4970837d5>
-  * <http://blog.upworthy.com/post/75795679502/what-uniques-and-pageviews-leave-out-and-why>
-  * [http://cutroni.com/blog/2012/02/21/advanced-content-tracking-with-google-analytics-part-1][1]
-  * [https://chartbeat.com/][2]
-
- [1]: http://cutroni.com/blog/2012/02/21/advanced-content-tracking-with-google-analytics-part-1/
- [2]: http://chartbeat.com/
+  * [https://medium.com/data-lab/mediums-metric-that-matters-total-time-reading-86c4970837d5]
+  * [http://blog.upworthy.com/post/75795679502/what-uniques-and-pageviews-leave-out-and-why]
+  * [http://cutroni.com/blog/2012/02/21/advanced-content-tracking-with-google-analytics-part-1]
+  * [https://chartbeat.com/]

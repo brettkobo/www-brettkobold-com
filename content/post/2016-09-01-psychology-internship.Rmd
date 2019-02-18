@@ -2,8 +2,9 @@
 title: How to “Hack” Psychology Internships
 author: Brett Kobold
 type: post
-date: 2016-08-31T19:05:35+00:00
+date: 2016-08-31
 url: /psychology-internship/
+description: "Helping my wife understand her various options as she was looking for an internship for her Psy. D."
 categories:
   - Data Visualizations
 
@@ -14,31 +15,31 @@ In this post, I will be analyzing data that I scraped off of <a href="https://me
 
 In order to not bore everyone with the code I used for scraping, processing and plotting the data, I will start with the fun visuals. First I wanted to explore the chances of actually getting an interview at a site. Each internship site is classified under 1 of 17 primary agency types. The APPIC directory has the last 3 years of interview statistics for each site. Below is a bar graph showing the average acceptance rate for interviews by agency type. The blue bars represents the average acceptance rate from the interview to someone accepting the site.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/chance.svg" alt="chance" class="aligncenter size-full wp-image-163" />
+<img src="/wp-content/uploads/2016/08/chance.svg#cetner" alt="chance" class="aligncenter size-full wp-image-163" />
 
 As shown there is a really good chance you can get an interview with the Armed Forced Medical Centers, but those sites generally require a lot of hours. It was also pointed out to me that for the Armed Forced Medical Centers, you have to be commissioned in the army and have had to serve at least a 3-year tour. Thanks [erg923][1] for that insight. 
 
 After looking at the odds of even getting an interview, I wanted to see what the sites were looking for in their interns. I wanted to know the type of experience that sites want candidates to have, the type of treatment they are using with clients, and the type of populations that sites are working with. In order to give context to the necessary requirements, I have chosen to use heat maps to show the popularity of the requirements across the agency types.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/exper.svg" alt="exper" class="aligncenter size-full wp-image-179" />
+<img src="/wp-content/uploads/2016/08/exper.svg#cetner" alt="exper" class="aligncenter size-full wp-image-179" />
 
 Across all of the categories having experience with assessment, anxiety disorders, and trauma PTSD is a common trend. 
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/popu.svg" alt="popu" class="aligncenter size-full wp-image-183" />
+<img src="/wp-content/uploads/2016/08/popu.svg#cetner" alt="popu" class="aligncenter size-full wp-image-183" />
 
 It seems that a lot of sites interact with ethnic minorities and low-income clients. 
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/treatment.svg" alt="treatment" class="aligncenter size-full wp-image-184" />
+<img src="/wp-content/uploads/2016/08/treatment.svg#cetner" alt="treatment" class="aligncenter size-full wp-image-184" />
 
 Another important element I wanted to explore was the average salaries across agency types. I have been told that the training you receive at your internship is more important than the money but we all know how expensive graduate school is. So a higher salary will always be nice. I have used a box and whisker plot to show the salary ranges. If you need a refresher on the box and whisker plots, [Flowing Data][2] wrote one. I also had to look it up&#8230;
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/money.svg" alt="money" class="aligncenter size-full wp-image-169" />
+<img src="/wp-content/uploads/2016/08/money.svg#cetner" alt="money" class="aligncenter size-full wp-image-169" />
 
 It appears that the army didn&#8217;t have any budget cuts, their salaries are 3x higher than the others. It&#8217;s pretty clear where Uncle Sam is sending money when the salary for army psychology interns is 3x higher than psych interns who work with veterans.
 
 One of the final pieces I wanted to look at was how many hours are necessary to apply. Similar to the salary graph, I used a box and whisker plot to show the ranges. If you have 400 to 500 hours you will generally be good to apply to most sites.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/08/hour.svg" alt="hour" class="aligncenter size-full wp-image-180" />
+<img src="/wp-content/uploads/2016/08/hour.svg#cetner" alt="hour" class="aligncenter size-full wp-image-180" />
 
 As you can see there is a lot of variance between the individual sites and each looks a bit different. There is not an ideal candidate that will match every site but there are a few general trends among the data. As a student, I would make sure to have 400+ hours and have experience with assessment, anxiety disorders, and trauma PTSD. Sites also appear to be interested in students who have worked with ethnic minorities and low-income clients. As therapy becomes more available to the masses, it will be important for therapist to have experience with those who didn&#8217;t previously have access to therapy. The struggles of those who have to pay with government assisted programs and subsidized fees will be different than those able to pay in full. If you don&#8217;t have experience in the few areas I mentioned, then it might be worth it to mention why you don&#8217;t have that experience and how you plan on obtaining that it. Every skill you don&#8217;t have that sites are looking for is a great point of conversation in applications and interviews. 
 

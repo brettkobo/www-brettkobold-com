@@ -8,11 +8,6 @@
   </h1>
   <span class="post-date">{{ .Date.Format "Jan 2, 2006" }} | {{ .ReadingTime }} min read</span>
   {{ .Description }}
-  {{ if .Truncated }}
-  <div class="read-more-link">
-    <a href="{{ .RelPermalink }}">Read More…</a>
-  </div>
-  {{ end }}
 </div>
 {{- end }}
 </div>

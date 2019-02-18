@@ -2,8 +2,9 @@
 title: What 9 Million Parking Tickets Says About Los Angeles
 author: Brett Kobold
 type: post
-date: 2016-10-04T06:58:46+00:00
+date: 2016-10-04
 url: /9-million-parking-tickets-la/
+description: "When you have a traffic ridden city, you will have lots of parking tickets. This is an analysis of over 9 millon parking tickets showing trends like common times or locations."
 categories:
   - Data Visualizations
   - R
@@ -19,25 +20,25 @@ Now that I know a lot more about R and how to work with data better, I thought I
 
 To start I wanted to show the overall volume of tickets by week over the course of the 4 years of data.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketsVol.svg" alt="ticketsvol" class="aligncenter size-full wp-image-259" />
+<img src="/wp-content/uploads/2016/10/ticketsVol.svg" alt="ticketsvol" class="aligncenter size-full wp-image-259" />
 
 There is a very large spike in February 2016, that becomes more apparent in the breakdown of the number of parking violations by day in this heat map.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/heatMapDayMonth-v2.svg" alt="heatmapdaymonth-v2" class="aligncenter size-full wp-image-263" />
+<img src="/wp-content/uploads/2016/10/heatMapDayMonth-v2.svg" alt="heatmapdaymonth-v2" class="aligncenter size-full wp-image-263" />
 
 To better understand that spike, I broke down the ticket volumes by violation type.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketsVolByViolation.svg" alt="ticketsvolbyviolation" class="aligncenter size-full wp-image-260" />
+<img src="/wp-content/uploads/2016/10/ticketsVolByViolation.svg" alt="ticketsvolbyviolation" class="aligncenter size-full wp-image-260" />
 
 There is an increase across the board not in just one ticket type. It is not easy to narrow down the exact reason for the spikes. Further research will need to be conducted to see what was going on in Los Angeles at this time.
 
 Another slice of data I wanted to explore was the number of tickets given per day on any given month. I&#8217;m always hearing that police and parking officials are trying to fill a monthly quota and that causes a huge spike of tickets at the end of the month. Well, that proved to be just a legend, at least according to the data. Below is a graph showing the various ticket types and the number of tickets given per day during the month.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/ticketVelocity.svg" alt="ticketvelocity" class="aligncenter size-full wp-image-261" />
+<img src="/wp-content/uploads/2016/10/ticketVelocity.svg" alt="ticketvelocity" class="aligncenter size-full wp-image-261" />
 
 After exploring some of the data over time, I wanted to explore the spatial aspects of the tickets. Most of this data was geocoded which allows for some fun visualization. Since this data only has individual points, I started with a density plot of the most frequented tickets around Los Angeles for each ticket type. On the left is a table of the number of tickets and neighborhood. That data was geocoded using the <a href="http://maps.latimes.com/about/#the-data" target="_blank">Los Angeles Times Data Desk</a> spatial data. The middle is a map with a density plot showing where ticket hot zones are. The right shows a heat map of the most common times for each ticket type. 
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/parkingHeatMapMapTable.svg" alt="parkingheatmapmaptable" class="aligncenter size-full wp-image-258" />
+<img src="/wp-content/uploads/2016/10/parkingHeatMapMapTable.svg" alt="parkingheatmapmaptable" class="aligncenter size-full wp-image-258" />
 
 From this high up, we can see a few things that stick out.
 
@@ -49,7 +50,7 @@ We can see is the spikes at 9am, 11am, 1pm for street sweeping tickets. These ar
 
 One of the final data slices I wanted to look at was the type of cars that are getting tickets. The data was a bit dirty, so I had to recode it. Underneath is a full-stacked bar chart broken down by car make and violation type. 
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/10/carMakeBar.svg" alt="carmakebar" class="aligncenter size-full wp-image-256" />
+<img src="/wp-content/uploads/2016/10/carMakeBar.svg" alt="carmakebar" class="aligncenter size-full wp-image-256" />
 
 One of the interesting things about this visual is that BMW and Mercedes do not like displaying their license plate. Perhaps the residents of Los Angeles should have followed <a href="http://www.itwire.com/it-people-news/enterprise/50649-the-truth-about-steve-jobs-number-plate" target="_blank">Steve Job&#8217;s</a> lead and swapped out their leased Mercedes every 6 months to avoid having to have a licence plate. 
 

@@ -2,15 +2,16 @@
 title: Quantified Self – Analysis of my Time
 author: Brett Kobold
 type: post
-date: 2017-05-31T21:20:37+00:00
+date: 2017-05-31
 url: /quant-self-time/
+description: "A favorite subject of mine, this analysis looks at a combintion of my location and FitBit data to show some common trends over a few weeks."
 categories:
   - Data Visualizations
   - Quantified Self
   - R
 
 ---
-Almost every day I am looking at data either for my job or personal development. A lot of the time I am looking at data that is describing something like [TSA claims][1] or [the metallurgy of bicycles][2]. As an analyst, I am always trying to synthesize stories from data to help bring insight to my team. Now I am starting to look at my habits and figure out how I can synthesize stories about myself. Recently I stumbled across the concept of a [Quantified self][3]. 
+Almost every day I am looking at data either for my job or personal development. As an analyst, I am always trying to synthesize stories from data to help bring insight to my team. Now I am starting to look at my habits and figure out how I can synthesize stories about myself. Recently I stumbled across the concept of a [Quantified self][3]. 
 
 > Quantifying myself means understanding my behaviors, habits, and unseen quirks through observations made and recorded about those behaviors. 
 

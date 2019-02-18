@@ -3,6 +3,7 @@ title: Intro to Time Series Forcasting using R
 author: Brett Kobold
 date: '2018-11-13'
 slug: intro-to-time-series-forcasting-using-r
+description: "An introduction to time series forcasting using weather data from the NOAA. "
 draft: TRUE
 ---
 

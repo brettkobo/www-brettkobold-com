@@ -2,14 +2,13 @@
 title: What gutting Net Neutrality is worth?
 author: Brett Kobold
 type: post
-date: 2017-12-01T23:57:20+00:00
+date: 2017-12-01
 url: /net-neutrality/
-categories:
-  - Uncategorized
+description: "A quick summary of what states voted against Net Neutrality."
 
 ---
-This is built from a simple web scrapper using R. It shows different aspects of which states sold out when it came to net neutrality.
+This is built from a simple web scrapper using R. It shows different aspects of which states sold us out when it came to net neutrality.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2017/12/plot.png" alt="" class="aligncenter size-full wp-image-426" style="width: 100%" srcset="http://www.brettrics.com/wp-content/uploads/2017/12/plot.png 3000w, http://www.brettrics.com/wp-content/uploads/2017/12/plot-214x300.png 214w, http://www.brettrics.com/wp-content/uploads/2017/12/plot-768x1075.png 768w, http://www.brettrics.com/wp-content/uploads/2017/12/plot-731x1024.png 731w" sizes="(max-width: 3000px) 100vw, 3000px" />
+<img src="/wp-content/uploads/2017/12/plot.png" alt="" class="aligncenter size-full wp-image-426" style="width: 100%" />
 
 Data from <https://www.theverge.com/2017/3/29/15100620/congress-fcc-isp-web-browsing-privacy-fire-sale>

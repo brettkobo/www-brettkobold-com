@@ -1,0 +1,13 @@
+{{ define "main" -}}
+<div class="post">
+  <h1>{{ .Title }}</h1>
+    <span class="post-date">{{ .Date.Format "Jan 2, 2006" }} | {{ .ReadingTime }} min read</span>
+  {{ .Content }}
+</div>
+
+{{ if .Site.DisqusShortname -}}
+<h2>Comments</h2>
+{{ template "_internal/disqus.html" . }}
+{{- end }}
+
+{{- end }}

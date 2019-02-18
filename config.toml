@@ -1,15 +1,20 @@
 theme = "hyde"
-baseURL = "https://friendly-elion-bb7962.netlify.com/"
+baseURL = "https://brettbold.netlify.com/"
 languageCode = "en-us"
 title = "Brettrics"
 description = "A place to explore data with all the R!"
 copyright = "2018"
 enableEmoji = "true"
 disqusShortname = "brettrics"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [[menu.main]]
     name = "About"
     url = "/about/"
+
+[[menu.main]]    
+    name = "Projects"
+    url = "/projects/"
 
 [params]
   themeColor = "theme-base-08"

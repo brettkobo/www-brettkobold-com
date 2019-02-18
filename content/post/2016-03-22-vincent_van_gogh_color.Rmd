@@ -2,8 +2,9 @@
 title: Van Gogh’s Life through his Favorite Colors
 author: Brett Kobold
 type: post
-date: 2016-03-22T03:12:38+00:00
-url: /vincent_van_gogh_color/
+date: 2016-03-22
+url: /vincent-van-gogh-color/
+description: "Exploring Van Gogh life through his paintings and the most common colors"
 categories:
   - Data Visualizations
 
@@ -16,7 +17,7 @@ As Vincent declared I wanted to have the courage to keep exploring data and disc
 
 Van Gogh painted 900+ painting, each line represents the most prominent color of that painting!
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png" alt="Screen Shot 2016-03-23 at 8.16.44 AM" width="953" height="324" class="alignleft size-full wp-image-120" srcset="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png 953w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-300x102.png 300w, http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM-768x261.png 768w" sizes="(max-width: 953px) 100vw, 953px" />
+<img src="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png#center" width="953" height="324" class="alignleft size-full wp-image-120" />
 
 <!--
 
