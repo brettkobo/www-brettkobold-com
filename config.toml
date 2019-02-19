@@ -18,6 +18,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
   themeColor = "theme-base-08"
+  google_tag_manager = "GTM-TRMW2JH"
   
 [params.social]
     github = "brettkobo"
