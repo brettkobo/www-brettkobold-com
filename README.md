@@ -1,2 +1,2 @@
-# www-brettrics-com
-New Hugo Blog for Brettrics.com
+# www.brettrics.com
+My personal website showcasing tutorials and analytics projects.
