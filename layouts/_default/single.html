@@ -1,4 +1,30 @@
 {{ define "main" -}}
+<style>
+  .field {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button[type=submit] {
+  width: 100%;
+  background-color: #ac4142;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type=submit]:hover {
+  background-color: lightcoral;
+}
+</style>
 <div class="post">
   <h1>{{ .Title }}</h1>
   {{ .Content }}
@@ -8,23 +34,11 @@
 dataLayer.push({'hugoTemplate': 'default'});
 </script>
 
-
+<h2>Contact ME!</h2>
 <form name="contact" method="POST" data-netlify="true">
-  <p>
-    <label>Your Name: <input type="text" name="name" /></label>   
-  </p>
-  <p>
-    <label>Your Email: <input type="email" name="email" /></label>
-  </p>
-  <p>
-    <label>Your Role: <select name="role[]" multiple>
-      <option value="leader">Leader</option>
-      <option value="follower">Follower</option>
-    </select></label>
-  </p>
-  <p>
-    <label>Message: <textarea name="message"></textarea></label>
-  </p>
+    <label>Your Name:</label> <input class="field" type="text" name="name" /> 
+    <label>Your Email:</label> <input class="field" type="text" name="email" />
+    <label>Message:</label> <textarea class="field" type=text name="message"></textarea>
   <p>
     <button type="submit">Send</button>
   </p>
