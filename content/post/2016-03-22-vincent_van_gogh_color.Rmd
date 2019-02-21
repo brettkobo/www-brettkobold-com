@@ -17,7 +17,7 @@ As Vincent declared I wanted to have the courage to keep exploring data and disc
 
 Van Gogh painted 900+ painting, each line represents the most prominent color of that painting!
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png#center" width="953" height="324" class="alignleft size-full wp-image-120" />
+<img src="/wp-content/uploads/2016/03/Screen-Shot-2016-03-23-at-8.16.44-AM.png#center" width="953" height="324" class="alignleft size-full wp-image-120" />
 
 <!--
 

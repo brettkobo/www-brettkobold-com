@@ -56,6 +56,16 @@
       readTime: '{{ .ReadingTime }}',
       publishDate: '{{ .Date }}'
     });
+    
+  navigator.getBattery().then(function(battery) {
+     dataLayer.push({
+     'battery_level': battery.level,
+     'battery_is_charging': battery.charging,
+     'battery_time_to_charge': battery.chargingTime,
+     'battery_time_to_discharge': battery.dischargingTime,
+     })
+    });
+    
   </script>
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

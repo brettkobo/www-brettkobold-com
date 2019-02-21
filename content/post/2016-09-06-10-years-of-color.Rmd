@@ -24,7 +24,7 @@ Following that in 2015, a lot more blue starts to appear. This is when I started
 
 This will bar chart will make it easier to see the volume of photos per year.
 
-<img src="http://www.brettrics.com/wp-content/uploads/2016/09/yearFreq.svg#center" alt="yearFreq" class="aligncenter size-full wp-image-212" height="70%" width="70%" />
+<img src="/wp-content/uploads/2016/09/yearFreq.svg#center" alt="yearFreq" class="aligncenter size-full wp-image-212" height="70%" width="70%" />
 
 I have also included my source code if anyone else would like to do this for their photos. In the future, I will be thinking of new ways to create a better visualization to show such large amounts of color.
 
