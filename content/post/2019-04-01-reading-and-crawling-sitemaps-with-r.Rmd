@@ -1,0 +1,50 @@
+---
+title: Reading and Crawling Sitemaps with R
+author: Brett Kobold
+date: '2019-04-01'
+url: reading-and-crawling-sitemaps-with-r
+description: "A simple toutoual on how to read and crawl a website and grab all of the URLs on it."
+draft: TRUE
+---
+Often I want to get an idea of which URL exisit on each page of my site. Here we have a quick script with R that can crawl a sitemap, hit every URL and build a data frame all of the URLs. I am using Workfront's domain because at the time of this post, I work there. 
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(tidyverse) #used for data mugging
+library(rvest) #used for web scraping
+library(urltools) #used to clean up URLs
+
+links_list <- read_xml("https://www.workfront.com/sitemap.xml") %>% as_list()
+links <- map(links_list$urlset, "loc") %>% map(1) %>% unlist() %>% unname()
+all_html <- links[1:10] %>% lapply(read_html)
+
+```
+
+After we have the links in a list, we can now crawl through the list and build a list of URLs that exist on each page.
+
+```{r eval=FALSE}
+link_list <- list()
+
+for(i in 1:length(all_html)) {
+  html <- all_html[[i]]
+  on_page_links <- html %>% html_nodes("a") %>% html_attr("href")
+  
+  link_data <- data.frame(page_url = links[[i]], on_page_links = on_page_links, stringsAsFactors = FALSE) %>%
+    mutate(has_domain = is.na(domain(on_page_links))) %>%
+    mutate(on_page_links = ifelse(!grepl("http", on_page_links), paste0("https://www.workfront.com", on_page_links), on_page_links)) %>%
+    unique() %>%
+    select(page_url, on_page_links)
+  
+  link_list[[i]] <- link_data
+}
+
+full_data <- bind_rows(link_list)
+```
+
+Here is a sample of the output of this script.
+```{r eval=FALSE}
+head(full_data, n = 20)
+```
+
+This list can be used to audit your site and figure out what links you have on each page.
+
+

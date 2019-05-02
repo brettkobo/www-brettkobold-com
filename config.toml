@@ -1,7 +1,7 @@
 theme = "hyde"
 baseURL = "https://brettkobold.com/"
 languageCode = "en-us"
-title = "Brettrics"
+title = "Brett Kobold"
 description = "A place to explore data with all the R!"
 copyright = "2018"
 enableEmoji = "true"
@@ -19,7 +19,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 [params]
   themeColor = "theme-base-08"
   google_tag_manager = "GTM-TRMW2JH"
-  profilePic = "https://media.licdn.com/dms/image/C5603AQHSUTky4gaEQw/profile-displayphoto-shrink_200_200/0?e=1556150400&v=beta&t=mMLDV9WG6ZaJ55LB01bHvRB6z98Kjaykx9nrCSW4Fe4"
+  profilePic = "slexy-brett.jpg"
   
 [params.social]
     github = "brettkobo"

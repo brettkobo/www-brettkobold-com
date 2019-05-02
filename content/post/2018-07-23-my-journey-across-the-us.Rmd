@@ -1,14 +1,13 @@
 ---
 title: My Journey Across the US
 author: Brett Kobold
-date: '2018-07-23'
+date: '2019-03-01'
 url: my-journey-across-the-us
 description: "With a recent move from Southern California to Indiana, I created a script that tracked my location and other attributes collected from my phone. This is showing some of my findings."
-draft: TRUE
+draft: FALSE
 
 ---
-
-Recent I moved across the United States with my wife and dog. Previously I lived in Pasadena, CA and now I am in South Bend, IN. After doing alot of packing and coordinatoring large cubes shippments we were off from California to Indiana. I was wanting to do something with data and collection for the drive across. So in my phone I set up a [Tasker](https://tasker.joaoapps.com/) app to record a file of alot of different variables that phones collect. Some of the more interesting ones are GPS, elevation, speed, and even list of wi-fi networks. Alot of the variables I was collecting were either consistant or moot, so I am not going to even talk about them. 
+Last summmer I moved across the United States with my wife and dog. Previously I lived in Pasadena, CA and now I live in South Bend, IN. After doing alot of packing and coordinatoring large cubes shippments we were off from California to Indiana. I was wanting to do something with data and collection for the drive across. So in my phone I set up a [Tasker](https://tasker.joaoapps.com/) app to record a file of alot of different variables that phones collect. Some of the more interesting ones are GPS, elevation, speed, and even list of wi-fi networks. Alot of the variables I was collecting were either unconsistant or moot, so I am not going to even talk about them. 
 
 One of the challenges working with this data set was how unfamilar I was with the values / data that were being collected in the file. I set up the Tasker script haphazzardly just to get it going. If I was to rebuild this, I would spend more time understanding what each variables returns. In order to get usable data, I actually had to do alot of parsing using RegEx. The file was essentially one large text file. Though it was a great learning oppertunity on working with text data and RegEx parsing, this did teach me how important it is to make sure your data collection system is spitting out good data.
 
@@ -16,11 +15,21 @@ One of the challenges working with this data set was how unfamilar I was with th
 
 Now on to more of the fun visuals.
 
-The Tasker task was recording data every 5 minutes. So I have a GPS corninates ever 5 minutes. Here is a map of the days we were traveling and where we were.
+The Tasker task was recording data every 5 minutes. So I have my GPS corninates recorded every 5 minutes. Here is a map of the days we were traveling and where we were.
+
 ![](/post/2018-07-23-my-journey-across-the-us_files/map.png)
 
-Using the same data, I am able able to caculate approxmate times we arrived place and the average speed we were traveling. 
+Evne though I hacked that app together and itj ust produce giant gross strings, I managed to collect the name of wifi along our route. Even though, I hate wordcloud I thought it would be intersting to create one of the wifi names that I collected.
 
--#image of arrival times and line graph of how fast we were moving.
+![](/post/2018-07-23-my-journey-across-the-us_files/wordcloud.png)
 
-Your cellphone also had an altitude reader. I was actually concerned about driving in the mountian with both my wife and my car full of stuff, but luckily 
+If it is not obvious, we stayed at a La Quinta and my phone was constantly recording it. 
+
+Here is a map of of the wifi. The bigger and darking the red dot, the more wifi signals were there. This is more of a measure of how long we stay placed but it does also show where there are more unique wifi signals.
+
+![](/post/2018-07-23-my-journey-across-the-us_files/wifi-map.png)
+
+My favorite wifi name that my phone passively collected was "F*#! YOU FIND YOUR OWN". Located at 34.88434, -117.0234, this happens to be at a has station near my home town in Barstow, CA in the Mojave Desert. I am happy to see the people of my home town keeping it classy. 
+
+
+
