@@ -1,81 +1,206 @@
 ---
-title: Digital Analyics QA Framework
+title: A Comprehensive Framework for QAing Digital Analyics
 author: Brett Kobold
-date: '2019-02-20'
+date: '2019-09-15'
 slug: digital-analyics-qa-framework
-description: A framework and workflow that can be used to QAing digital analytics.
-draft: TRUE
-categories: []
-tags: []
+description: "A framework and workflow that can be used to QAing digital analytics."
+draft: FALSE
 ---
 
 
 
-<p>There is often an overlooked area of digital analytics called Quality Assurance. Often the “unsexy” side of software engineering, QA is extremely important and can make or break a business and even the launch of analytics projects. Over the last few years I have learned that a lot of data is collected in a similar way and they use the same basic frameworks you can use to understand and debug those collectors. I will be be speaking to the specific realm of digital analytics because that is what I am currently using a lot of my core skills for. Most modern sites will be using a tag manger and data layer configuration to fire their digital analytics pixels.</p>
-<p>There are some other ways to configure digital analytics tools but the most common way will be a data layer, a tag manager, and marketing tags. So to make sure we are all on the same page, I will provide some definitions that I will be using through out this post. Some of the terms are shared with other tools.</p>
-<p>This is the diagram / framework I used to understand how data layers and tag mangers work together. This is ba</p>
-<p><em>insert my drawing of how data layers work</em> (practice with tablet)</p>
-<p>The data layer is a persistent javascript object the contains data you want to send to your tools. This could be actions users are taking on your site or user information like email, demographics, or user IDs. This layer of information contains your business most important business logic and valuable data. There are lots of conversation going on with what is the best way to build a data layer and how much information should be going into it but I will save that for the #measure community to debate. #arraysvsobject… Reguardless this is an extremely important part of an implementation and should have a lot of documentation supporting it and people need to understand the importance of this.</p>
-<p>The only advice I will give around data layers is to make them tool agnostic, don’t build it for your specific tag management solution. That will come in handy if you would like to switch tag managers later on. So often we build a data layer to a specific tool and it will require us to rebuild it of we want to switch tag managers.</p>
-<p>Next is the tag manager, there are a lot of different platforms that you can use for tag manager. Here is a decently comprehensive list of tag managers. A tag manager will contain snippet of javascript that will either communicate with the data layer, modify the user experience, or send data to another platform. There are also lots of guide on how to set up your tag manager and the best advice I have heard is if you have the chance to do something with the UI, do it. This can easily turn into an area where 6 different peoples logic and coding philoshopys can come together. Then when you try to fix something you have to try and understand why someone used a jQuery selector here, a data attribute and a rule there, and just hard code the rule into the actual javascript it self. A tag manager is meant to take the data and business logic thet goes into the data layer and use that information to communicate to other platforms or modify the experience for the user with personalization or A/B testing.</p>
-<p>There are a ton of vendors that receive want to receive data from your website and each site will be different because you are marketing, personalization or collecting data to analyze with web analytics tools.</p>
-<p>I like to break up my QA into 4 stages and each tech stack will have slightly different work flows but they can all follow this basic framework. On a side note, all of these process can be automatic and put into your unit testing but it is important to understand all the different layers so how data is tagged, collected, and processed so you can find out where the issues is. A lot of the time I will be working with someone that only specialize in one part of the the collection pipeline of digital analytics tools and their focus would only be on their area.</p>
-<p>Some of those commons issue are
-* Common issue is aggregation of data. Simo had great point where where he pointed out that the front end mechanism do not have any notation of a “session” which can make it hard for an engineering working on that implementation to understand that send a certain event will cause that aggeragation to be totally message up, like interaction event vs non-interaction for Google Analytics
-* Another issues is when the first hit does not have all the proper data. Might make it hard for the tool to connect all of the session metrics together.
-* Each tools carry their own assumptions about how it aggregates its data, sometime the session might be 30 minutes or a whole day.</p>
-<p>Hopefully with this framework every person that touches the analytics development cycle will have a basic understanding of how data flows between all of these systems and it will make easier to identify where there is a bug or bad data. Even though you should test your analytics in all browers, I primally do my testing in Chrome so I will be speaking to that mostly. There are generally equalivant tools for each of the features I am describing.</p>
-<p>Even though there are are ways to automatic some of these tasks, those solutions are either expensive or will require a technical enduser to implement.</p>
-<p>First Stage - Data Layer
-The first stage of analytics I like to QA is the data layer. Generally the the data layer will be called <code>digitalData</code>, <code>dataLayer</code>, or <code>utag_data</code>. You can always ask the developer the variable name. The easiest way to look at the data layer is the in the console tab of the developer tools. A few things to keep in mind as you are looking at this set up data.</p>
+<p>There is often an overlooked area of digital analytics called Quality Assurance (QA). Often the “unsexy” side of software engineering, QA is extremely important and can make or break a business and drastically affect the launch of an analytics project. This not only delays projects and timelines but bad data also introduces trust issues into the teams managing that data and any of the analytics that is run on top of that.</p>
+<p>Over the last few years, I have learned that a lot of data on the web is collected in a similar way and that we can use a simple framework to understand and debug these collectors. I will be speaking to the specific realm of digital analytics because that is what I am currently using my core skills for. Most modern sites will be using a tag manager and data layer configuration to collect their digital analytics data.</p>
+<p>There are other methods to collect data outside of a tag manager and data layer, but it is one of the most common methods used today. Historically we have hardcoded analytics into our website but with tag manager, we have abstracted that out and this has allowed for analyst, marketers, and developer to collaborate to deploy tags and collect data in 1st party and 3rd party analytics systems.</p>
+<p>To start I wanted to share a diagram I use to communicate how tag managers work.</p>
+<p><img src="/post/2019-02-20-digital-analyics-qa-framework_files/tag-manager-example.png" /></p>
+<p>The <strong>website or application</strong> is your website or web application like your e-commerce store, blog, lead generation site, or product. This is normally built by your IT team or development team.</p>
+<p>The <strong>data layer</strong> is a persistent javascript object the contains data that you want to collect and send to vendors This could be actions users are taking on your site like clicking a button, viewing a page, or scrolling. It also can contain user information like email address, demographics, or user IDs. This layer of information contains your business’s most important business logic and valuable data to describing important user actions and attributes about the user. There are lots of conversation going on with what is the best way to build a data layer and how much information should be going into it but I will save that for the <a href="https://www.measure.chat/">#measure</a> community to debate. A good place to start with researching a data layer is the <a href="https://www.w3.org/community/custexpdata/2013/12/16/final-report-customer-experience-digital-data-layer-v1-0-ready/">W3 Community Customer Digital Data Layer.</a></p>
+<p>Next is the <strong>tag manager</strong>, there are a lot of different platforms that you can use for tag management. <a href="https://www.observepoint.com/blog/10-tag-management-solutions/">Here</a> is a decently comprehensive list of tag managers. A tag manager will contain snippets of javascript that will either communicate with the data layer, modify the user experience, or send data to other platforms.</p>
+<p>There are also lots of guides on how to set up your tag manager and the best advice I have heard is if you have the chance to do something with the UI, do it. This can easily turn into a tool where 6 different ’ logic and coding philosophies get smashed together. Then when you try to fix something you have to try and understand why someone used a jQuery selector here, a data attribute and a rule there, and a hardcoded rule nested deep in custom javascript there. A tag manager is meant to take the data and business logic that goes into the data layer and use that information to communicate to other platforms or modify the experience for the user with personalization or A/B testing. There are a ton of vendors that want to receive data from your website and each site will be different because your marketing efforts, personalization, and various analytics platforms.</p>
+<p>Now to ensure that all of these systems are working properly, I like to break up my QA process into four stages and each tech stack will have slightly different workflows but they can all follow this basic framework. On a side note, all of these processes can be automated and put into your unit testing but it is important to understand all the different layers to know how data is tagged, collected, and processed so you can find out where the issues are. A lot of the time I will be working with someone that only specialize in one part of the collection pipeline of digital analytics tools and their focus would only be on their area.</p>
+<p>Hopefully, with this framework, every person that touches the analytics development cycle will have a basic understanding of how data flows between all of these systems and it will it make easier to identify where there is a bug or bad data. Even though you should test your analytics in all browsers, I primarily do my testing in Chrome so I will be speaking to that mostly. There are generally equivalent tools for each of the features I am describing.</p>
+<p>After you have your tags ready, either in a Preview mode like GTM or in a staging environment, you can start to move through the various stages of the QA process. Similar to the way data flows through the various components, I use that same data flow to determine my QA process.</p>
+<p>Some basic ideas you will want to understand before moving through this next section are javascript variables, APIs, arrays, objects, server-side vs client-side and the Chrome DevTools.</p>
+<p><strong>Javascript variables</strong> (<a href="https://www.w3schools.com/js/js_variables.asp">info</a>) - a variable that holds some type of data that can be changed at any point.</p>
+<p><strong>APIs</strong> (<a href="https://medium.com/@perrysetgo/what-exactly-is-an-api-69f36968a41f">info</a>) - API stands for Application Programming Interface. An API typically is used to communicate with some type of application, either to send it information or retrieve it. For example, your website might have a database of users, through an API it is possible to retrieve and set that information in a javascript variable so your tag manager can use it.</p>
+<p><strong>Array</strong> (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">info</a>) - an array is a list of values that is stored in a javascript variable.</p>
+<p><em>Example:</em></p>
+<pre class="javascript"><code>var students = [&#39;billy&#39;, &#39;jane&#39;, &#39;brett&#39;];</code></pre>
+<p><strong>Object</strong> - an object is a key-value pair collection of data.</p>
+<p><em>Example</em></p>
+<pre class="javascript"><code>var student_data = {
+  name: &#39;billy&#39;,
+  age: 12, 
+  specialty: &#39;putting wood chips in water fountains&#39;,
+  powers: &#39;never getting wood chips in his shoes&#39;
+};</code></pre>
+<p><strong>Server-Side:</strong> (<a href="https://www.codeconquest.com/website/client-side-vs-server-side/">info</a>): Code typically runs in two places, the server or the client. Server-side code runs in the background typically on another server outside of your computer. This is where databases are stored and maintained. If there is data that is rendered from the server to the datalayer it will either be served up through an API or saved in some sort of variable on the client in localStoage, cookies, or on the DOM. Example of this is php and python.</p>
+<p><strong>Client-Side</strong> (<a href="https://www.codeconquest.com/website/client-side-vs-server-side/">info</a>): This is typically your browser or local computer. Client-side code will run in your browser and typically will interact directly with the DOM or HTML. Data points that come from client-side code are derived from the APIs from the <a href="https://developer.mozilla.org/en-US/docs/Web/API">browser</a>.</p>
+<p><strong>Chrome DevTools</strong> (<a href="https://developers.google.com/web/tools/chrome-devtools/">info</a>): There are a lot of different functions and tools in the Chrome DevTools but the two I primarily focus on are Console and Network. In the Console you will be able to run javascript and examine variable that has been set. The Network tab is where I examine the data points that tags are sending to their vendors. This tab help see all the layers of data that is being transferred to and from the site.</p>
+<p><strong>My Flow:</strong></p>
+<p>When I am working on analytics implementations, I use the same flow that the data moves through for my QA process.</p>
+<blockquote>
+<p>datalayer → tag manager → network log → analytics application</p>
+</blockquote>
+<p><strong>First Stage - Data Layer</strong></p>
+<p>I start with the datalayer, because that is the first component to linking application generated data with the tag manager. Generally, the data layer will be called <code>digitalData</code>, <code>dataLayer</code>, or <code>utag_data</code>. You can always ask the developer the variable name. The easiest way to look at the data layer is in the <a href="https://developers.google.com/web/tools/chrome-devtools/console/">console tab</a> of the developer tools. After opening the console and opening the javascript variable for the datalayer, I will do a sanity check. Does everything make sense? Are there any NULL values that are supposed to have data?</p>
+<p>Here are also some tips I use when looking at this important component:</p>
 <ul>
-<li>Watch when certain data is pushed to the data layer. It is important to know what part of your data layer is being powered by certain APIs. For example sometimes it may take a little longer user information to load because your the code that powers the data layer has to make a call to that API.</li>
-<li>Make sure you are observing what events are entering to, this will help know what will end up in the analytics tools.</li>
-<li>Run through the variables and make sure that they make sense. Sometimes variables like pageURL right be referencing the incorrect windows.url function.</li>
-<li>Knowing when enters the data layer will help you understand when and how the data is collecting. Is the event data you are looking for firing from a custom function or is the tag manger waiting for something to enter the data layer to fire.</li>
+<li>Watch when certain data is pushed to the data layer. It is important to know what part of your data layer is being powered by certain APIs. For example user information might enter the data layer at a different point because it has to make a call to an API. If a tag was fired before that data was there, then that row of data might be missing an important value.</li>
+<li>Look at the common variables like page URL, user IDs, user agent, or referral URL. If the page URL has parameters on it, your tag might be picking up those URL parameters.</li>
+<li>Keep in mind <a href="https://stackoverflow.com/questions/34510/what-is-a-race-condition">race conditions</a> when observing the data layer, if a tag is depending on a piece of data or will trigger off a piece of data entering the datalayer there is a chance it will be missing.</li>
+<li>Have in mind the general code that is setting data on the datalayer. Generally there are two ways that data gets set, server-side or client-side. You can typically ask your development team whether that data point came from the server or the client. As you get more familiar with your particular implementation, this will become easier. This matters because sometimes you will have to track down what code is supplying that specific data point to debug or understand why it is generating incorrectly.</li>
+<li>If you need to find the specific code snippet that is generating the datalayer, use <a href="https://www.telerik.com/blogs/16-ways-to-search-find-and-edit-with-chrome-devtools">Chrome’s search function</a> to local specific values. Look for either the object key-value pair or the function that pushes that specific element onto the data layer like <code>dataLayer.push({'pageURL':</code>.</li>
 </ul>
-<p>Some tools that are helpful for looking at the data layer are:
-dataslayer</p>
-<p>Second Stage - Tag Manager
-After looking at the data layer, I like to start looking at the specific tag that I am testing. At this point it as simple as making sure that the tag manager is loading correctly and not throwing any javascript errors. To make it easier to manager, I will only look work on a few tags at a time. When you are looking for javascript errors, this is also a time for make sure your libraries are loading.</p>
-<p>Some common issue are:
-* Incorrect account ID, make sure you are using the account ID that was given from code snippet.
-* Tag manager is referencing the incorrect variables in the data layer.
-* Race condition might be affecting how your tag are firing. If a tag is waiting for data that there is a chance that the tag will not fire or it will fire with partial data.
-* Sometime you will be waiting for data from an API and it might be slowing down your tags. Try to avoid making your tag reliant on slow API and if you do need that data store it in local storage or as a cookie so you don’t have to keep making a call to the library. You can use the network tab in the dev tools to see when certain calls are going on.
-* Single Page Applications (SPA) can cause issues If you do not have the logic wired up correct. A lot of tag managers are meant to work with traditional website site the refresh when a new page loads. With single page apps you don’t have that benefit and will need to have a mechanism that simulates a page view. There are plenty of blog post about this for each specific tag manager.
-* Landing page redirect might be affecting how the tag manager is loading.</p>
-<p>Hopefully you don’t have issues with race conditions but to can be a common issue when you are working with so many technologies likes APIs, data layers, tag managers, and tag templates.</p>
-<p>Third Stage - Network Log
-This is one of the most important steps, as it is where you will observe what data is being send to a specific vendor. To access this, use the Network tab in the Developer Tools. Here you will be able to see all of the pixels / tracking calls that are being made to your marketing or analytics platforms. For example you can see all calls being made to Adobe Analytics by searching for <code>/ss</code> in the search bar. Every tool has a specific URL structure that they use to receive data. Using the <code>/ss</code> search parameter, we see all of the calls made to Adobe Analytics. On the panel on the right, you will see the specific values that are being made for that call. Each tool has its own paramaters that map to its own values. There are not many sources that document the parameters but for the most part you are able to figure out what they are collecting.</p>
-<p>Here is a list of common search patterns you can use to search for main tools.
-Adobe Analytics - <code>/ss</code>
-Google Analytics - <code>www.google-analytics.com/collect</code>
-Facebook - <code>https://www.facebook.com/tr/</code>
-Twitter - <code>t.co</code>
-Snowplow - <code>/com.snowplowanalytics.snowplow</code></p>
-<p>On this tab you will want to make sure that all of your calls are going through. Some things to check for are:
-* That a pageview is fired every time a page is loaded.
-* If you are expecting an event to fire, look for that specific value.
-* Ensure that all of the data elements are present that you believe should be there.
-* Sometimes the data will be encode in base64, you can use an extension to decode it or just do a quick Google search for one.<br />
-* The order of how the pixel load is also important, if a event is loading before a page-view it can affect how the data is aggregated and cause issues with reporting.
-* Make sure the first pageview call has your campaign information, most likely stored in the URL paramters</p>
-<p>Fourth Stage - Platform Analytics
-One of the final steps I will go though is validation that data that goes into the systems you are collecting data in. It is important to keep in mind that no system collects data the same and there will always be difference between the systems. I will go over some observations I have seen when validating data against other systems. They main things to keep in mind is to look for similar trends between data. Each platforms has their own scheme for determining how data is aggregated.</p>
+<p><strong>General Advice</strong></p>
+<p>The best advice I have been given for data layers is to make them tool agnostic, don’t build it for your specific tag management solution. That will come in handy if you would like to switch tag managers later on. So often we build a data layer to a specific tool and it will require us to rebuild it if we want to switch tag managers.</p>
+<p>The data layer is a fundamental piece of technology for any business and it needs to be treated as such. There are a few different philosophies on building this but what is important is to document how it is built. The key is every part of it can be mapped to a business objective. Personally, I keep a spreadsheet of every piece of data, map it to a business objective, and then some general notes of where the data is coming from.</p>
+<p>Some tools that are helpful for looking at the data layer are:</p>
 <ul>
-<li>Each system will have different ways that it defines “visits” / “sessions” but for the most part a visit is all of the pageviews and events grouped together in</li>
+<li><a href="https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo?hl=en-US">dataslayer</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/datalayer-checker/ffljdddodmkedhkcjhpmdajhjdbkogke?hl=en">Datalayer Checker</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/analytics-pros-datalayer/kmcbdogdandhihllalknlcjfpdjcleom?hl=en">Analytics Pros - dataLater Inspector+</a></li>
 </ul>
-<p>Jen Kunz Beacon Parser</p>
-<p>Automated Solutions
-Hub-Scan
-ObservePoint</p>
-<p>Programmatic Solutions
-WAUnit
-Site Infrastructure Tests
-Automated GTM Datalayer Test</p>
-<p>Sources / Articles
-LunaMetrics - Creating a Test Plan for Goolge Analytics Implementations
-Developers Guide to Web Analytics - Jan Exner
-<a href="https://www.blastam.com/blog/improve-web-analytics-data-quality" class="uri">https://www.blastam.com/blog/improve-web-analytics-data-quality</a>
-Google Aahttps://www.lunametrics.com/blog/2018/04/27/validating-google-analytics-hits-network-tab/</p>
+<p><strong>Second Stage - Tag Manager</strong></p>
+<p>After looking at the data layer, I look at the specific tag that I am testing. At this point it as simple as making sure that the tag manager is loading correctly and not throwing any javascript errors.  ****To make it easier to manage, I will only work on a few tags at a time. When you are looking for javascript errors, this is also a time to make sure your libraries are loading correctly.</p>
+<p>Some common issue are:</p>
+<ul>
+<li>Incorrect account IDs, make sure you are using the account ID that was given from code snippet.</li>
+<li>Tag manager is referencing the incorrect variables in the data layer.</li>
+<li>Race conditions might be affecting how your tags are firing. If a tag is waiting for data that there is a chance that the tag will not fire or it will fire with partial data.</li>
+<li>Sometimes you will be waiting for data from an API and it might be slowing down your tags. Try to avoid making your tags reliant on slow APIs and if you do need that data store it in local storage or as a cookie so you don’t have to keep making a call to the library. You can use the network tab in the dev tools to see when certain calls are going on.</li>
+<li><a href="https://en.wikipedia.org/wiki/Single-page_application">Single Page Applications (SPA)</a> can cause issues If you do not have the logic wired up correctly. A lot of tag managers are meant to work with traditional websites that refresh when a new page loads. With single page apps you don’t have that benefit and will need to have a mechanism that simulates a pageview. There are plenty of blog post about this for each specific tag manager.</li>
+<li>Landing page redirects might be affecting how the tag manager is loading.</li>
+<li>Take advantage of specific extensions for each tag manager. They often will let you know what rules are loading that trigger specific tags to fire. You can find a list of those at the bottom of this post.</li>
+</ul>
+<p><strong>General Advice:</strong></p>
+<p>Get to know what rules you are depending on to fire tags. I like to separate out my tags into three categories based on the type of data being sent: loading library, pageview, and event. If you have these three separated, it is easier to debug what is going on with the code. As we move into a newer age of applications and analytics, the idea of separating out pageviews and events will go away and the page view will just be another type of event but currently a lot analytics libraries split these out into separate functions, hence the reason I split them out. When you split them out you are easily able to add console.logs or other debugging mechanisms. Not all tag managers let you easily do this and the UI might not allow for it but if you mentally break up a tag anatomy into those three categories it will be easier to understand. First load the library that is needed to send data to a vendor. Then there is typically a function that sends a pageview on loading of the library. Then there will be another function that fires when an event happens. If you read the documentation or look at the custom code you will typically see this structure.</p>
+<pre class="javascript"><code>// used to load the analytics libarary in
+createElement.(&#39;Some LONG code the creates a source script or iframe&#39;)
+
+// tpyically some type of function that lets the vendor know your specific account ID
+vendor.init(&quot;VENDOR-ID&quot;);
+
+// used to send pageview information with extra data
+vendor.sendPageView(&#39;pageview&#39;, 
+ {
+  pageurl: &#39;/woodchip-picker&#39;,
+  name: &#39;billy&#39;
+ }
+);
+
+// used to track interactions like clicks, video views, scrolling, etc
+vendor.sendEvent(&#39;event&#39;, 
+ {
+  action: &#39;pick woodchips&#39;,
+  label: &#39;from show&#39;,
+  name: &#39;billy&#39;
+ }
+);</code></pre>
+<p>All of these actions can be split up typically and stored in their own tag with a specific trigger. This helps a lot with understanding how data is being sent for each type of event.</p>
+<p><strong>Third Stage - Network Log</strong></p>
+<p>This is one of the most important steps, as it is where you will observe what data is being sent to a specific vendor. To access this, use the Network tab in the Developer Tools. Here you will be able to see all of the pixels / tracking calls that are being made to your marketing or analytics platforms. For example, you can see all calls being made to Adobe Analytics by searching for <code>/ss</code> in the search bar. Every tool has a specific URL structure that they use to receive data. Using the <code>/ss</code> search parameter, we see all of the calls made to Adobe Analytics. On the panel on the right, you will see the specific values that are being set for that call. Each tool has its own parameters that map to its own values. There are not many sources that document the parameters but for the most part, you are able to figure out what they are collecting.</p>
+<p>Here is a list of common search patterns you can use to search for main tools.</p>
+<ul>
+<li>Adobe Analytics - <code>/ss</code></li>
+<li>Google Analytics - <code>www.google-analytics.com/collect</code></li>
+<li>Facebook - <code>https://www.facebook.com/tr/</code></li>
+<li>Twitter - <code>t.co</code></li>
+<li>Snowplow - <code>/com.snowplowanalytics.snowplow</code></li>
+<li>Google Ads - <code>doubleclick</code> or <code>googleads</code></li>
+</ul>
+<p>On this tab you will want to make sure that all of your calls are going through. Some things to check for are:</p>
+<ul>
+<li>That a pageview is fired every time a page is loaded.</li>
+<li>If you are expecting an event to fire, look for those specific values.</li>
+<li>Ensure that all of the data elements are present that you believe should be there.</li>
+<li>Sometimes the data will be encoded in base64, you can use an <a href="https://chrome.google.com/webstore/detail/base64-encode-and-decode/kcafoaahiffdjffagoegkdiabclnkbha?hl=en">extension</a> to decode it or use <a href="https://www.base64decode.org/">this one</a> online.</li>
+<li>The order of how the pixels load is also important, if an event is loading before a page-view it can affect how the data is aggregated and cause issues with reporting.</li>
+<li>Make sure the first pageview call has your campaign information, most likely stored in the URL parameters.</li>
+<li>If you can’t find the network calls you need, search for the specific ID for your account. Typically you will find it from that specific ID. For example, if your Google Analytics ID is GA-124212-34 you can find all network calls for that platform using that ID.</li>
+<li>If you are looking for form submissions you can search for <code>method: POST</code> to only look at calls that are sent with a POST protocol.</li>
+<li>When looking at the Headers tab of each call you will generally see all your data points parsed out at the bottom. In order to understand what each variable gets mapped to, it requires some research on that specific vendor. Not all vendors will list out what there parameters are but you can typically take a best guest.</li>
+<li>If calls are too big, they sometimes get sent as a POST which will not get parsed in the Headers tab by Chrome. At that point I will copy the whole URL that sent the data and take it too a <a href="https://www.freeformatter.com/url-parser-query-string-splitter.html">tool</a> that parses query strings to extract those parameters.</li>
+<li>If you are seeing two pageviews or network calls for a specific vendor, check if another rule is loading another pageview. A majority of the time, there might be some code triggering another pageview or event call that you did not intend or there is another tool loading in a library that is outside of the tag manager.</li>
+</ul>
+<p><strong>Network Call Related Resources:</strong></p>
+<ul>
+<li><a href="http://digitaldatatactics.com/beaconParser/">Jen Kunz Beacon Parser</a> </li>
+<li><a href="https://docs.adobe.com/content/help/en/analytics/implementation/javascript-implementation/data-collection/query-parameters.html">Adobe Analytics URL Parameters</a></li>
+<li><a href="https://www.bounteous.com/insights/2018/04/27/validating-google-analytics-hits-network-tab/">Google Analytics Query Parameters</a></li>
+</ul>
+<p><strong>General Advice</strong></p>
+<p>When looking at the network tab, it is helpful to have the “Preserve log” button clicked this helps preserve all of then network calls as you are going from page to page. This section is not only useful for looking at tags for debugging, but it can also be helpful to understand how a website is built and get an understanding of how ALL data flows to and from it. I have specifically used this tab to monitor form submissions to validate hidden fields or just wondering what other websites are collecting with their forms.</p>
+<p>Another not so <a href="https://us.norton.com/internetsecurity-emerging-threats-what-is-the-difference-between-black-white-and-grey-hat-hackers.html">white hat</a> use of the network log is to look at other sites API sand how they transfer data around. If their authentication and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS policy</a> is not set up correctly it might be possible to access that API in a malicious manner. I have found a few endpoints that expose too much information about users and could potentially lead to data leaks. This is one of the ways hackers have found open end API endpoints and quietly extracted data from them. An example that I ran across was an event registration website that exposed all the email addresses of the people going to that event hosted on their site. I emailed them about that possible leakage and they shut down that endpoint within the day.</p>
+<p>Every browser has some version of this if you want to test this in other browsers. If you don’t want to worry about browser specific you can use third party network sniffers to suck up all the data and monitor it there. I would recommend <a href="https://www.charlesproxy.com">Charles Proxy</a> or <a href="https://www.wireshark.org/">WireShark</a>. I have used both and have found Charles Proxy easier to use. These tools will monitor ALL inbound and outbound network signals coming to that device.</p>
+<p>If you need to monitor mobile app traffic, you will have to go through a few different steps. Here is a <a href="https://community.tealiumiq.com/t5/Tealium-for-Android/Setting-up-Charles-to-Proxy-your-Android-Device/ta-p/5121">guide</a> on how to connect to Android written by Tealium and here is <a href="https://www.charlesproxy.com/documentation/faqs/using-charles-from-an-iphone/">another guide</a> for iOS written by Charles Proxy.</p>
+<p>If you want to monitor Android Mobile Chrome browser, you can use <a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/">Remote Debugging</a>. I have used this a few times to figure out if mobile sites were causing any issues with tagging. More often then not I have not found a significant difference when testing on my desktop browser and my mobile browser.</p>
+<p>Although it is extremely helpful to learn how to use the network tab in the developer tools, there are plenty of analytics debuggers built as chrome extensions that make this much easier than parsing individual calls. I teach people first about the network tab and the functionality of it before I tell them about the debuggers because this leads to a strong understanding of the whole system in general. I will include a list of vendor specific debuggers and general debuggers at the bottom. An argument can be made for learning how to debug with both analytics debuggers and the network tab.</p>
+<p>As you can see there are ALOT of way to monitor network traffic and alot of use cases for understanding how this works. I could write several whole blog post about the use cases for looking at this particular tab. As I have learned more about web development and technology, I have found my self always using this particular development tool to understand how things work. Often when I am researching for jobs, I will spend several hours going through the network logs of a website along with the code to understand the amount of effort that goes into how things are created. Often when code is understandable and built with strict purpose, I know that will be a place I want to work.</p>
+<p><strong>Fourth Stage - Platform Analytics</strong></p>
+<p>One of the final steps I will go through is the validation of data that goes into the systems you are collecting data in. It is important to keep in mind that no system collects data the same and there will always be differences between the systems. I will go over some observations I have seen when validating data against other systems. The main things to keep in mind is to look for similar trends between data. Each platform has its own schema for determining how data is aggregated.</p>
+<p>General Observations:</p>
+<ul>
+<li>Each tool carries it own’s assumptions and will make different inference about the data. They will have different ways that it defines “visits” / “sessions” but for the most part a visit is all of the pageviews and events grouped together by some definitions. In Google Analytics, it is all hits with in a 30 minute time window but maybe on a mobile device the concept of a visit is defined by the whole days worth of activities.</li>
+<li>Another common issue is the aggregation of data. Simo has a <a href="https://www.simoahava.com/analytics/the-schema-conspiracy/">great point</a> where he pointed out that the front end data collection mechanisms do not have any notion of a “session” which can make it hard for an software engineer working on that implementation to understand that sending a certain event will cause that aggregation to be totally messed up, like an <a href="https://www.nichemarket.co.za/blog/nichemarket-advice/interaction-hit-vs-non-interaction-hit">interaction event vs non-interaction event</a> for Google Analytics.</li>
+<li>Sometimes when data is sent in an odd order, the analytics tool might not be able to back-propagate information to those previous data points. Say the user ID was set on the third or fourth network call. The first two rows of data will not be attached to that specific user ID making it hard to link those two specific calls to that user. This is why it becomes extremely important to understand how <a href="https://snowplowanalytics.com/blog/2014/07/11/on-the-benefits-of-configurable-schemas/">web analytics schemas work</a> and possibly move into building your own.</li>
+<li>If you are going to compare data, try to use row level detail data. A pageview and event will look similar when comparing Google Analytics and Adobe Analytics when looking at the raw data. This can come from using BigQuery for Google Analytics or the Data Feed from Adobe Analytics. If you do not have access to BigQuery, you can sort of build the idea of row level detail data using the implementation described in this <a href="https://philipwalton.com/articles/the-google-analytics-setup-i-use-on-every-site-i-build/#tracking-custom-data">blog post by Philip Walton</a>.</li>
+<li>If you have to compare records of some sort like form submissions or orders, use a a common order ID or transaction ID that is collected in both systems. This will make it much easier to determine what is missing and will help to identify why. Look at common data points between the too and try to understand if a certain browser or device is dropping orders. I have found more often than not, there was some type of race condition that prevented an order from being collected in the analytics system. If it appears to be random what orders are being dropped, it sadly has to be chalked up to how javascript can fail a thousand different ways.</li>
+<li>If you are trying to debug an exact experience, take the User ID or client ID you are collecting in the network calls and look up that user ID either in the UI or in the database to see exactly how those hits were processed. This can GREATLY help understand how a system processed information.</li>
+<li>Even though this might be a fruitless effort, I have also found it helpful to send the user ID that is generated from other systems to each other. It helps when trying to link those sessions and users together. Don’t spend to much time on this unless you are using it to link authenticated users by some type of ID. This sometimes helps in understanding the assumptions another system is making about the data as it is processed.</li>
+</ul>
+<p><strong>General Advice</strong></p>
+<p>Don’t go too deep on validating data between systems, there are just too many variations on how things work to give a great answer on why one system says this and another says that. Instead ,I would focus on the first three steps of this process, examine the data layer, the tag manager and the network calls. If those are working as expected you most likely will get clean data. The only time I would go deep on trying to validate data is for orders or transactions. These are generally the most important KPIs and requires the most accuracy. Alot of validation in this step is just thinking about the data logically. Does this make sense why data is appearing a certain way? If so let it be and focus on analysis instead of chasing the ghost of comparing systems.</p>
+<p><strong>Ending Thoughts</strong></p>
+<p>If you only remember a few things from this post, here is a basic over of the process I typically go through for validating digital analytics tags.</p>
+<ol style="list-style-type: decimal">
+<li>Sanity check datalayer in the console.</li>
+<li>Look at tag manager code and see if it is throwing any errors. Use the tag manager debuggers to look at data elements and rule loading.</li>
+<li>Examine network logs for specific vendor tags or pixels.</li>
+<li>Validate that data has made it into your analytics platform either in real-time or check back after it has been processed.</li>
+</ol>
+<p>Now all of this is obviously a manual process and is not that easy to do it at scale when you have alot of tags and a large website but understanding the basics of this will help you quickly debug problems when other systems have found issues. I would recommend checking some of the automated solutions I have posted below, those are generally 3rd party softwares the will crawl your site and simulate tags on a schedule to help catch when data looks inaccurate or site changes cause a shift in tag infrastructure. If you are more ingrained with your development team I would look more into unit testing and building test rights into your systems. Jan Exner has an <a href="https://webanalyticsfordevelopers.com/category/tdd-2/">excellent series</a> on this, he talks about full frameworks that can be deployed alongside your code that can help catch errors early on. Having experience with each of them, I believe it is foundational that you learn how to do this manually before taking advantage of unit testing or automated solutions.</p>
+<p><strong>Vendor Specific Debuggers</strong></p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/adobe-experience-cloud-de/ocdmogmohccmeicdhlhhgepeaijenapj?hl=en">Adobe Experience Cloud Debugger</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna?hl=en">Google Analytics Debugger</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/tag-assistant-by-google/kejbdjndbnbjgmefkgdddjlbokphdefk?hl=en-US">Tag Assistant (Google)</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/facebook-pixel-helper/fdgfkebogiimcoedlicjlajpkdmockpc">Facebook Pixel Helper</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/snowplow-analytics-debugg/jbnlcgeengmijcghameodeaenefieedm?hl=en-US">Snowplow Analytics Debugger</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/tealium-tools/gidnphnamcemailggkemcgclnjeeokaa?hl=en-US">Tealium Tools</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/tagtician-adobe-launch-dt/hiaoiehpkillodoeillmodjcadmfmcbg">Tagician: Adobe Launch &amp; DTM Debugger</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/gtm-sonar/iiihoahkpncaheicjfemhjkkfamcahcd">GTM Sonar</a></li>
+</ul>
+<p><strong>All Around Debuggers</strong></p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/observepoint-tagdebugger/daejfbkjipkgidckemjjafiomfeabemo?hl=en-US">ObervePoint TagDebugger</a></li>
+<li><a href="https://chrome.google.com/webstore/detail/waspinspector-analytics-s/niaoghengfohplclhbjnjheodgkejpih?hl=en-US">WASP.inspector</a></li>
+</ul>
+<p><strong>Helpful Chrome Extensions</strong></p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?hl=en-US">EditThisCookie</a> - Allows quick access to the cookies on a site. Useful for look at primary user IDs stored in cookies.</li>
+<li><a href="https://chrome.google.com/webstore/detail/base64-encode-and-decode/kcafoaahiffdjffagoegkdiabclnkbha?hl=en-US">Base64 Encode and Decode</a> - Encode and decodes base64.</li>
+<li><a href="https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en-US">SelectorGadget</a> - Helpful for looking at element and the CSS selector need to click identify certain elements.</li>
+<li><a href="https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en-US">Tag Manager Injector</a> - Helpful for injecting a instance of Google Tag Manager for testing.</li>
+</ul>
+<p><strong>Automated Solutions</strong></p>
+<ul>
+<li><a href="https://www.observepoint.com/">ObservePoint</a></li>
+<li><a href="http://www.hub-scan.com/">Hub-Scan</a></li>
+<li><a href="https://www.telerik.com/fiddler">Telerik Fiddler</a></li>
+<li><a href="https://taginspector.com/">Tag Inspector</a></li>
+</ul>
+<p><strong>Programmatic Solutions</strong></p>
+<ul>
+<li><a href="https://github.com/blast-analytics-marketing/WAUnit">WAUnit</a></li>
+<li><a href="https://github.com/janexner/site-infrastructure-tests">Site Infrastructure Tests</a></li>
+<li><a href="https://github.com/sahava/gtm-datalayer-test">Automated GTM Datalayer Test</a></li>
+</ul>
+<p><strong>Sources / Articles</strong></p>
+<ul>
+<li><a href="https://www.lunametrics.com/blog/2017/08/22/google-analytics-test-plan-quality-assurance/">LunaMetrics - Creating a Test Plan for Goolge Analytics Implementations</a></li>
+<li><a href="https://webanalyticsfordevelopers.com/">Jan Exner - Developers Guide to Web Analytics</a></li>
+<li><a href="https://www.blastam.com/blog/improve-web-analytics-data-quality">BlastAM - Improve Web Analytics Data Quality</a></li>
+<li><a href="http://digitaldatatactics.com/beaconParser/">Jenn Kunz - Adobe Analytics Beacon Parser</a></li>
+</ul>

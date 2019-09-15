@@ -1,0 +1,59 @@
+---
+title: Not much colder - South Bend vs. Madison
+author: Brett Kobold
+date: '2019-05-01'
+slug: not-much-colder-south-bend-vs-madison
+description: "I used data to show that it really isn't that much colder in Winsonsin..." 
+draft: TRUE
+---
+In the past year I moved from Los Angles, California to South Bend, Indiana with my wife. This has introduced some interesting interactions with the locals of my new midwestern home. As I interact with people and share where I am from, I usually get one responses. 
+
+> Why would you move from sunny California to out here?!?
+
+Typically that question would follow up with how I will not survive the winter here and how terrible it is. Well my response to that is I DID SURVIVE THE WINER! It even got to [record low temperature](https://www.southbendtribune.com/news/local/south-bend-sets-record-for-jan-but-doesn-t-break/article_c7744cb4-a247-5c9f-b173-4e45fa17c01f.html) this year at around -22° F. The dogs had to wear rubber shoes but we got through it. 
+
+![](https://media.giphy.com/media/yic7xENOa1XDa/giphy.gif)
+
+Winter has come. 
+
+For the last little bit, I have actually stopped bringing it up because I have gotten real tired of that response. Now that I have been out here closer to a year, it comes up less but I digress. 
+
+I feel like I am starting to establish my root in the midwest and I am actually enjoying living out here. With my wife finishing up grad school, we have had to bounce around a few time. Because of this we will be moving again this summer to Madison, Wisonsin. With this news I have started to share with people I have started to get a whole new response.
+
+> Winter in Indiana is nothing like Wisconsin Winter.
+
+Despite surviving the terrible winter this year in Indiana, that is still not good enough to truely understand the difference between Indiana and Wisconsin. Everywhere I have moved has become a contest to prove to me how cold and unbearable something will be.
+
+So too understand the true difference between these two winters, I used something that I know very well. Data. I wanted to find out the major difference between these two climates and relay on something I have the power to understand instead of just the words of others that keeps reminding I will not make it through the winters of where ever I am moving too.
+
+First we will look at temperature for the highs and lows of South Bend and Madison. This data is coming from the [NOAA](NOAA Site) GCHD data set. We will be looking at the last 10 years of data and finding the averages to account for a typical weather pattern for each region. Red is South Bend and purple is Madison.
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#3d6bdd0bb8534929876f7dcd527ee9f7)
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#f1d6c2ebb3864ba19b6433f202f08039)
+
+So we can see that they for the most part overlap, the summer looks very similar and don't change that much. Winter is where we start to see a change. On the right we can see that there is a difference. On average we see about a 5° difference between the winter weeks. In my head 5° is not that big of difference and I think I could survive that.
+
+Lets take a look at a few other common weather patterns: amount of snow, rain, and wind. Between the temperature, snowfall, rainfall, and the wind we can get a pretty good idea of the main difference between these two areas.
+
+**Snow Fall**
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#d9c34294bb0c489ebe6e8641af91b8b6)
+
+Surpizenly South Bend actually gets more snow then Madison, particularly in January. But when we look at the amount of snow we get a different story.
+
+**Snow Depth**
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#7e9b0918279a44b4b76b6c08050c8502)
+
+Snow depth is a reflection of how much snow is currently on the ground and the new snowfall. It simply terms it can be compared to the amount of cumulative snow. One thing I heard from people is the snow just doesn't melt in Madison and it just keeps piling up. That is apparrent here when we see the start of winter just pounding it with snow and continuing in to the early months of the year.
+
+Rain
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#e2f07c8b0fd549f8996229b4d1b64cee)
+
+This visual is a little harder to read but it shows the average amount of rain in inches by week. When looking at the amount of rain, we dont see a wild variance but South Bend is still pulling ahead in average total rain per year at 62 inchs and Madison at 58
+
+Wind
+
+[](https://www.notion.so/e8c4b39069aa4f7f8f65831c75b10214#9cc9762ae41243a88a84505f298d0026)

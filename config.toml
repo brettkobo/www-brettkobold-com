@@ -12,10 +12,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "About"
     url = "/me/about/"
 
-[[menu.main]]    
-    name = "Projects"
-    url = "/projects/"
-
 [params]
   themeColor = "theme-base-08"
   google_tag_manager = "GTM-TRMW2JH"
@@ -24,6 +20,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 [params.social]
     github = "brettkobo"
     facebook = "brettkob"
-    linkedin = "brettkobo"
+    linkedin = "brettskobold"
   
   

@@ -4,7 +4,7 @@ author: Brett Kobold
 date: '2019-03-01'
 url: my-journey-across-the-us
 description: "With a recent move from Southern California to Indiana, I created a script that tracked my location and other attributes collected from my phone. This is showing some of my findings."
-draft: FALSE
+draft: TRUE
 
 ---
 Last summmer I moved across the United States with my wife and dog. Previously I lived in Pasadena, CA and now I live in South Bend, IN. After doing alot of packing and coordinatoring large cubes shippments we were off from California to Indiana. I was wanting to do something with data and collection for the drive across. So in my phone I set up a [Tasker](https://tasker.joaoapps.com/) app to record a file of alot of different variables that phones collect. Some of the more interesting ones are GPS, elevation, speed, and even list of wi-fi networks. Alot of the variables I was collecting were either unconsistant or moot, so I am not going to even talk about them. 
