@@ -3,6 +3,7 @@ title: A Comprehensive Framework for QAing Digital Analyics
 author: Brett Kobold
 date: '2019-09-15'
 slug: digital-analyics-qa-framework
+url: /digital-analyics-qa-framework/
 description: "A framework and workflow that can be used to QAing digital analytics."
 draft: FALSE
 ---
@@ -240,6 +241,8 @@ Now all of this is obviously a manual process and is not that easy to do it at s
 **Automated Solutions**
 
 - [ObservePoint](https://www.observepoint.com/)
+- [DataTrue](https://datatrue.com/)
+- [QA2L](https://www.qa2l.com/)
 - [Hub-Scan](http://www.hub-scan.com/)
 - [Telerik Fiddler](https://www.telerik.com/fiddler)
 - [Tag Inspector](https://taginspector.com/)
