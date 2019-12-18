@@ -1,0 +1,17 @@
+---
+title: My Hours in Meeting Doubled After my Promotion
+author: Brett Kobold
+date: '2019-12-17'
+slug: my-hours-in-meeting-doubled-after-my-promotion
+url: /my-hours-in-meeting-doubled-after-my-promotion/
+description: "Quick analysis about amount of time I spend in meetings per week after promotion"
+categories: []
+tags: []
+draft: FALSE
+---
+
+In early February 2019 I was promoted and put in charge of our Marketing Analytics Team at Workfront. Though it has been an exciting new challenge, it has come with a cost. Before the promotion, I was averaging about 10 hour per week in meetings. After the promotion, that average went up to 20 hour! In order to understand how I am spending my time the last year, I pulled all my Google Calendar data from the API and built this visualization.
+
+![](/post/2019-12-17-my-hours-in-meeting-doubled-after-my-promotion_files/brett-work-hours.png)
+
+The amount of time I am spending in meetings is only increasing! Even though this is a natural thing to occur with a promotion to a team manager, I want to continue to monitor this and make sure I am not spending all of my time in meetings and still have time to work on individual projects. We will see how the next year turns out. Here is the [code](https://gist.github.com/brettkobo/bc48819d3839f99e09152f5032aca82a) if you want to create your own.
