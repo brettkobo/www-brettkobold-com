@@ -10,7 +10,7 @@ tags: []
 draft: FALSE
 ---
 
-In early February 2019 I was promoted and put in charge of our Marketing Analytics Team at Workfront. Though it has been an exciting new challenge, it has come with a cost. Before the promotion, I was averaging about 10 hour per week in meetings. After the promotion, that average went up to 20 hour! In order to understand how I am spending my time the last year, I pulled all my Google Calendar data from the API and built this visualization.
+In early February 2019 I was promoted and put in charge of our Marketing Analytics Team at Workfront. Though it has been an exciting new challenge, it has come with a cost. Before the promotion, I was averaging about 10 hours per week in meetings. After the promotion, that average went up to 20 hours! In order to understand how I am spending my time the last year, I pulled all my Google Calendar data from the API and built this visualization.
 
 ![](/post/2019-12-17-my-hours-in-meeting-doubled-after-my-promotion_files/brett-work-hours.png)
 
